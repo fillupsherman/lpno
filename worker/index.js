@@ -51,7 +51,7 @@ export default {
       });
 
 
-      const res = await fetch(API_URL, {
+      const res = await fetch('https://api.meetup.com/gql-ext', {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + token,
