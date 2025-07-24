@@ -51,7 +51,10 @@ export default {
         headers: {
           Authorization: 'Bearer ' + token,
           'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
-          'Content-Type': 'application/json'
+          'content-type': 'application/json',
+          'access-control-allow-origin': '*',
+          'access-control-allow-methods': 'GET,POST,OPTIONS',
+          'access-control-allow-headers': 'content-type'
         },
         body: gqlBody
       });
