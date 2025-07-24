@@ -8,7 +8,7 @@ export default {
         `https://api.meetup.com/${env.GROUP_URLNAME}/events?sign=true&key=${env.MEETUP_TOKEN}`,
         { headers: { Authorization: `Bearer ${env.MEETUP_TOKEN}` } }
       );
-      const events = await meetup.json();
+      let events = await meetup.json();
 
       // Pull local RSVPs object from KV: {eventId: [names]}
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
