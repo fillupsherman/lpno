@@ -5,6 +5,7 @@ export default {
       new Response(JSON.stringify(body), {
         status,
         headers: {
+          'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
           'content-type': 'application/json',
           'access-control-allow-origin': '*',
           'access-control-allow-methods': 'GET,POST,OPTIONS',
@@ -27,13 +28,18 @@ export default {
         query: `
           query($slug: ID!){
             groupByUrlname(urlname:$slug){
-              events(input:{first:20, filter:{status:"UPCOMING"}}){
+              events(input: {
+                first:20, 
+                filter: { happening: ["UPCOMING"] } 
+              }) {
                 edges{
                   node{
                     id
                     title
                     dateTime
-                    rsvps { totalCount }
+                    rsvps { 
+                      totalCount 
+                    }
                   }
                 }
               }
