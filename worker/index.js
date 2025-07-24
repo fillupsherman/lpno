@@ -25,19 +25,25 @@ export default {
       /* 2 – GraphQL POST */
       const gqlBody = JSON.stringify({
         query: `
-          query($slug:String!){
+          query($slug: ID!){
             groupByUrlname(urlname:$slug){
-              upcomingEvents(input:{first:20}){
-                edges{ node{
-                  id title dateTime yesRsvpCount
-                }}
+              events(input:{first:20, filter:{status:"UPCOMING"}}){
+                edges{
+                  node{
+                    id
+                    title
+                    dateTime
+                    rsvps { totalCount }
+                  }
+                }
               }
             }
           }`,
         variables: { slug: env.GROUP_URLNAME }
       });
 
-      const res = await fetch('https://api.meetup.com/gql', {
+
+      const res = await fetch('https://api.meetup.com/gql-ext', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -50,12 +56,12 @@ export default {
       if (!res.ok) return json({ error:'Meetup API error', status:res.status }, 502);
 
       const data = await res.json();
-      const edges = data?.data?.groupByUrlname?.upcomingEvents?.edges || [];
+      const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => ({
         id: e.node.id,
         name: e.node.title,
         time: new Date(e.node.dateTime).getTime(),
-        meetup_rsvps: e.node.yesRsvpCount
+        meetup_rsvps: e.node.rsvps?.totalCount ?? 0
       }));
 
       /* merge local RSVPs stored in KV */
