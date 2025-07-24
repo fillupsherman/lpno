@@ -28,14 +28,17 @@ export default {
         query: `
           query($slug: ID!){
             groupByUrlname(urlname:$slug){
-              upcomingEvents(input: { first: 20 }) {
-                edges {
-                  node {
+              events(input: {
+                first:20, 
+                filter: { happening: ["FUTURE"] } 
+              }) {
+                edges{
+                  node{
                     id
                     title
                     dateTime
-                    rsvps {
-                      totalCount
+                    rsvps { 
+                      totalCount 
                     }
                   }
                 }
