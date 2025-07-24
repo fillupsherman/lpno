@@ -42,6 +42,7 @@ export default {
                     rsvps { totalCount }
                     featuredEventPhoto {
                       baseUrl
+                      id
                     }
                   }
                 }
@@ -71,13 +72,15 @@ export default {
       if (data.errors) return json({ api_errors: data.errors }, 502);
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => {
-        const stem = e.node.featuredEventPhoto?.baseUrl;
+        const photo = e.node.featuredEventPhoto;
         return {
           id:   e.node.id,
           name: e.node.title,
           time: new Date(e.node.dateTime).getTime(),
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
-          image_url: stem ? `${stem}1024x576.jpg` : null,
+          image_url: photo
+            ? `${photo.baseUrl}${photo.id}/1024x576.jpg`   // ← insert photo.id
+            : null,
           description: e.node.description
       }});
 
