@@ -6,23 +6,18 @@ export default {
     if (req.method === 'GET' && url.pathname === '/events') {
       const meetup = await fetch(
         `https://api.meetup.com/${env.GROUP_URLNAME}/events?sign=true&key=${env.MEETUP_TOKEN}`,
-        { headers: { Authorization: `Bearer ${env.MEETUP_TOKEN}` } }
+        { 
+          headers: { 
+            Authorization: `Bearer ${env.MEETUP_TOKEN}`,
+            'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
+            'Accept': 'application/json'
+          } 
+        }
       );
-      let events = await meetup.json();
+      const events = await meetup.json();
 
       // Pull local RSVPs object from KV: {eventId: [names]}
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
-      
-      // TEMP logging
-      console.log('meetup status', meetup.status);
-      const txt = await meetup.text();
-      console.log('first 200 chars', txt.slice(0, 200));
-
-      if (meetup.headers.get('content-type')?.includes('application/json')) {
-        events = JSON.parse(txt);
-      } else {
-        return json({ error: 'Meetup returned HTML challenge' }, 502);
-      }
       const combined = events.map(ev => {
         const names = local[ev.id] || [];
         return {
