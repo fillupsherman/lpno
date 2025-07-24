@@ -26,20 +26,17 @@ export default {
       /* 2 – GraphQL POST */
       const gqlBody = JSON.stringify({
         query: `
-          query($slug: ID!){
-            groupByUrlname(urlname:$slug){
-              events(input: {
-                first:20, 
-                filter: { happening: [FUTURE] } 
-              }) {
-                edges{
-                  node{
+          query ($slug: ID!) {
+            groupByUrlname(urlname: $slug) {
+              events(
+                input: { first: 20, filter: { happening: [FUTURE] } }
+              ) {
+                edges {
+                  node {
                     id
                     title
                     dateTime
-                    rsvps { 
-                      totalCount 
-                    }
+                    rsvps { totalCount }
                   }
                 }
               }
@@ -49,10 +46,10 @@ export default {
       });
 
 
-      const res = await fetch('https://api.meetup.com/gql-ext', {
+      const res = await fetch(API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': 'Bearer ' + token,
+          Authorization: 'Bearer ' + token,
           'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
           'Content-Type': 'application/json'
         },
@@ -64,7 +61,7 @@ export default {
       const data = await res.json();
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => ({
-        id: e.node.id,
+        id:   e.node.id,
         name: e.node.title,
         time: new Date(e.node.dateTime).getTime(),
         meetup_rsvps: e.node.rsvps?.totalCount ?? 0
