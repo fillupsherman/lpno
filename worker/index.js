@@ -27,11 +27,11 @@ export default {
       /* 2 – GraphQL POST */
       const gqlBody = JSON.stringify({
         query: `
-          query ($slug: ID!) {
+          query ($slug: String!) {
             groupByUrlname(urlname: $slug) {
               events(
                 first: 20,
-                filter: { status: "UPCOMING" }
+                filter: { status: UPCOMING }
               ) {
                 edges {
                   node {
