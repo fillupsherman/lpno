@@ -71,14 +71,16 @@ export default {
       console.log('GQL raw →', JSON.stringify(data));
       if (data.errors) return json({ api_errors: data.errors }, 502);
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
-      const eventsArray = edges.map(e => ({
-        id:   e.node.id,
-        name: e.node.title,
-        time: new Date(e.node.dateTime).getTime(),
-        meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
-        image_url: e.node.featuredEventPhoto?.baseUrl || null,
-        description: e.node.description
-      }));
+      const eventsArray = edges.map(e => {
+        const stem = e.node.featuredEventPhoto?.baseUrl;
+        return {
+          id:   e.node.id,
+          name: e.node.title,
+          time: new Date(e.node.dateTime).getTime(),
+          meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
+          image_url: stem ? `${stem}600x338.jpg` : null,
+          description: e.node.description
+      }});
 
       /* merge local RSVPs stored in KV */
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
