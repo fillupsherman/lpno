@@ -1,5 +1,25 @@
 export default {
+  
   async fetch(req, env) {
+    async function getAccess(env) {
+      const C = 'meetup_access';
+      const saved = await env.RSVPS.get(C, { type: 'json' }) || {};
+      if (saved.token && saved.expires > Date.now()/1000 + 60) return saved.token;
+
+      const body = new URLSearchParams({
+        client_id:     env.MEETUP_CLIENT_ID,
+        client_secret: env.MEETUP_CLIENT_SECRET,
+        grant_type:    'refresh_token',
+        refresh_token: env.MEETUP_REFRESH_TOKEN
+      });
+      const res = await fetch('https://secure.meetup.com/oauth2/access', { method:'POST', body });
+      const j   = await res.json();
+      await env.RSVPS.put(C, JSON.stringify({
+        token:   j.access_token,
+        expires: Math.floor(Date.now()/1000) + j.expires_in
+      }));
+      return j.access_token;
+    }
     const json = (body, status = 200) =>
       new Response(JSON.stringify(body), {
         status,
@@ -23,13 +43,13 @@ export default {
 
     try {
       // ----------  GET /events  ----------
+      const token = await getAccess(env);
       if (req.method === 'GET' && url.pathname === '/events') {
-        const meetupURL =
-          `https://api.meetup.com/${env.GROUP_URLNAME}/events` +
-          `?sign=true&key=${env.MEETUP_TOKEN}`;
+        const meetupURL = `https://api.meetup.com/${env.GROUP_URLNAME}/events`;
 
         const meetupRes = await fetch(meetupURL, {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'User-Agent': 'Mozilla/5.0 (MeetupRSVP/1.0)',
             'Accept': 'application/json'
           }
