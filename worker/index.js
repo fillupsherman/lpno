@@ -5,6 +5,7 @@ export default {
       new Response(JSON.stringify(body), {
         status,
         headers: {
+          Authorization: `Bearer ${env.MEETUP_TOKEN}`,
           'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
           'content-type': 'application/json',
           'access-control-allow-origin': '*',
