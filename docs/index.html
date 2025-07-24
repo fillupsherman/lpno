@@ -25,7 +25,7 @@
         const card = document.createElement('div');
         card.innerHTML = `
           <h2>${ev.name}</h2>
-          ${ev.image_url ? `<img src="${ev.image_url}=eventcover" width="320"/>` : ''}
+          ${ev.image_url ? `<img src="${ev.image_url}" width="1024" height="576"/>` : ''}
           <p>${new Date(ev.time).toLocaleString()}</p>
           <p>Details: ${ev.description}</p>
           <p>Total RSVPs: ${ev.total_rsvps}

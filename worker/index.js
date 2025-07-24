@@ -68,7 +68,6 @@ export default {
       if (!res.ok) return json({ error:'Meetup API error', status:res.status }, 502);
 
       const data = await res.json();
-      console.log('GQL raw →', JSON.stringify(data));
       if (data.errors) return json({ api_errors: data.errors }, 502);
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => {
@@ -78,7 +77,7 @@ export default {
           name: e.node.title,
           time: new Date(e.node.dateTime).getTime(),
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
-          image_url: stem ? `${stem}600x338.jpg` : null,
+          image_url: stem ? `${stem}1024x576.jpg` : null,
           description: e.node.description
       }});
 
