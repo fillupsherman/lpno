@@ -38,7 +38,11 @@ export default {
                     id
                     title
                     dateTime
+                    description
                     rsvps { totalCount }
+                    featuredEventPhoto {
+                      baseUrl
+                    }
                   }
                 }
               }
@@ -71,7 +75,9 @@ export default {
         id:   e.node.id,
         name: e.node.title,
         time: new Date(e.node.dateTime).getTime(),
-        meetup_rsvps: e.node.rsvps?.totalCount ?? 0
+        meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
+        image_url: e.node.featuredEventPhoto?.baseUrl || null,
+        description: e.node.description
       }));
 
       /* merge local RSVPs stored in KV */
