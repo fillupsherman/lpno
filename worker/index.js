@@ -5,7 +5,7 @@ export default {
     // -------- GET /events --------
     if (req.method === 'GET' && url.pathname === '/events') {
       const meetup = await fetch(
-        `https://api.meetup.com/${env.GROUP_URLNAME}/events?key=${env.MEETUP_TOKEN}`,
+        `https://api.meetup.com/${env.GROUP_URLNAME}/events?sign=true&key=${env.MEETUP_TOKEN}`,
         { headers: { Authorization: `Bearer ${env.MEETUP_TOKEN}` } }
       );
       const events = await meetup.json();
@@ -49,9 +49,13 @@ export default {
   }
 };
 
-function json(obj) {
-  return new Response(JSON.stringify(obj), {
-    headers: { 'content-type': 'application/json',
-               'access-control-allow-origin': '*' }  // allow GitHub Pages
+function json(body, status=200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'content-type': 'application/json',
+      'access-control-allow-origin': '*',
+      'access-control-allow-methods': 'GET,POST,OPTIONS'
+    }
   });
 }
