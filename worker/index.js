@@ -65,6 +65,9 @@ export default {
         }
 
         const eventsArray = await meetupRes.json();
+        const raw = await meetupRes.text();
+        console.log('MEETUP‑STATUS', meetupRes.status);
+        console.log('MEETUP‑BODY', raw.slice(0, 300));
         if (!Array.isArray(eventsArray))
           return json({ error: 'Meetup payload not an array' }, 502);
 
