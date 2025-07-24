@@ -18,6 +18,10 @@ export default {
 
       // Pull local RSVPs object from KV: {eventId: [names]}
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
+
+      console.log('meetup status', meetup.status);
+      const txt = await meetup.text();
+      console.log('first 200 chars', txt.slice(0, 200));
       const combined = events.map(ev => {
         const names = local[ev.id] || [];
         return {
