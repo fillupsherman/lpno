@@ -30,7 +30,7 @@ export default {
             groupByUrlname(urlname:$slug){
               events(input: {
                 first:20, 
-                filter: { happening: ["FUTURE"] } 
+                filter: { happening: [FUTURE] } 
               }) {
                 edges{
                   node{
