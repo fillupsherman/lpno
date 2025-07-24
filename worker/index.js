@@ -31,7 +31,7 @@ export default {
             groupByUrlname(urlname: $slug) {
               events(input: {
                 first: 20,
-                filter: { status: "UPCOMING" } }
+                filter: { status: "ACTIVE" } }
               ) {
                 edges {
                   node {
