@@ -1,0 +1,6 @@
+# .gitignore
+# Never commit local secrets or build artefacts
+.env
+node_modules/
+# Wrangler logs
+wrangler-*.log

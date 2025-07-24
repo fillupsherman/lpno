@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Meetup Events</title>
+</head>
+<body>
+  <h1>Upcoming Events</h1>
+  <div id="events"></div>
+
+  <script>
+    // ⚠️ replace with your Worker URL after deploy
+    const API = 'https://lpno.lpno-dev.workers.dev';
+
+    async function load() {
+      const res   = await fetch(`${API}/events`);
+      const events = await res.json();
+      const root  = document.getElementById('events');
+      root.innerHTML = '';
+
+      events.forEach(ev => {
+        const card = document.createElement('div');
+        card.innerHTML = `
+          <h2>${ev.name}</h2>
+          <p>${new Date(ev.time).toLocaleString()}</p>
+          <p>Total RSVPs: ${ev.total_rsvps}
+             (Meetup: ${ev.meetup_rsvps}, Site: ${ev.local_rsvps})</p>
+
+          <form data-id="${ev.id}">
+            <input name="name" placeholder="Your name" required />
+            <button>RSVP</button>
+          </form>
+          <hr/>
+        `;
+        root.appendChild(card);
+      });
+
+      document.querySelectorAll('form').forEach(f => {
+        f.onsubmit = async e => {
+          e.preventDefault();
+          const name = f.name.value.trim();
+          if (!name) return;
+          await fetch(`${API}/rsvp`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ event_id: f.dataset.id, name })
+          });
+          alert('RSVP saved!');
+          load();        // refresh counts
+        };
+      });
+    }
+    load();
+  </script>
+</body>
+</html>

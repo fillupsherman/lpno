@@ -1,0 +1,11 @@
+name = "lpno"
+main = "index.js"
+compatibility_date = "2025-07-24"         # today
+
+[[kv_namespaces]]
+binding = "RSVPS"                         # env.RSVPS in code
+id = "4924fad62cc04932a8d8ae14d4433a19"                              # replaced by wrangler
+preview_id = "3f07589fa5ab4d44963ab8726eb51d00"
+
+[vars]
+GROUP_URLNAME = "leftist-progressive-night-out"      # will be overridden in dashboard
