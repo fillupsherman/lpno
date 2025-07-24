@@ -54,6 +54,9 @@ export default {
             'Accept': 'application/json'
           }
         });
+        const raw = await meetupRes.text();
+        console.log('MEETUP‑STATUS', meetupRes.status);
+        console.log('MEETUP‑BODY', raw.slice(0, 300));
 
         if (!meetupRes.ok)
           return json({ error: 'Meetup API error', status: meetupRes.status }, 502);
@@ -65,9 +68,6 @@ export default {
         }
 
         const eventsArray = await meetupRes.json();
-        const raw = await meetupRes.text();
-        console.log('MEETUP‑STATUS', meetupRes.status);
-        console.log('MEETUP‑BODY', raw.slice(0, 300));
         if (!Array.isArray(eventsArray))
           return json({ error: 'Meetup payload not an array' }, 502);
 
