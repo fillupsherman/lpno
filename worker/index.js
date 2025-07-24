@@ -64,6 +64,7 @@ export default {
       if (!res.ok) return json({ error:'Meetup API error', status:res.status }, 502);
 
       const data = await res.json();
+      if (data.errors) return json({ api_errors: data.errors }, 502);
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => ({
         id:   e.node.id,
