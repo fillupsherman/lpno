@@ -29,10 +29,7 @@ export default {
         query: `
           query ($slug: String!) {
             groupByUrlname(urlname: $slug) {
-              eventsSearch(
-                first: 20,
-                filter: { status: "UPCOMING" }
-              ) {
+              upcomingEvents(input: { first: 20 }) { 
                 edges {
                   node {
                     id
