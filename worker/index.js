@@ -27,11 +27,15 @@ export default {
       const gqlBody = JSON.stringify({
         query: `
           query ($slug: ID!) {
-            groupByUrlname(urlname: $slug) {
-              events(
-                input: { first: 20, filter: { happening: [FUTURE] } }
+            proNetwork(urlname: $slug) {
+              eventsSearch(
+                input: { first: 20, filter: { status: "UPCOMING" } }
               ) {
-                edges {
+              totalCount
+              pageInfo {
+                endCursor  
+              }  
+              edges {
                   node {
                     id
                     title
