@@ -1,61 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Meetup Events</title>
-</head>
-<body>
-  <h1>Upcoming Events</h1>
-  <div id="events"></div>
-
-  <script>
-    // ⚠️ replace with your Worker URL after deploy
-    const API = 'https://lpno.lpno-dev.workers.dev';
-
-    async function load() {
-      const res   = await fetch(`${API}/events`);
-      const events = await res.json();
-      const root  = document.getElementById('events');
-      root.innerHTML = '';
-      if (!Array.isArray(events)) {
-        root.innerHTML = `<p>Error loading events: ${events.error + " " + events + " " + JSON.stringify(events) || 'Unknown error'}</p>`;
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meetup Events</title>
+    <style>
+      :root{
+        --bg: #0b0f17;
+        --card: #121826;
+        --muted: #8fa3b0;
+        --text: #e6eef4;
+        --accent: #7c5cff;
+        --accent-2: #22c55e;
+        --danger: #ef4444;
+        --ring: rgba(124,92,255,.35);
+        --shadow: 0 10px 25px rgba(0,0,0,.35);
+        --radius-lg: 20px;
+        --radius-sm: 12px;
       }
-      events.forEach(ev => {
-        const card = document.createElement('div');
-        card.innerHTML = `
-          <h2>${ev.name}</h2>
-          ${ev.image_url ? `<img src="${ev.image_url}" width="1024" height="576"/>` : ''}
-          <p>${new Date(ev.time).toLocaleString()}</p>
-          <p>Details: ${ev.description}</p>
-          <p>Total RSVPs: ${ev.total_rsvps}
-             (Meetup: ${ev.meetup_rsvps}, Site: ${ev.local_rsvps})</p>
+      @media (prefers-color-scheme: light){
+        :root{ --bg:#f7f9fc; --card:#ffffff; --text:#0f172a; --muted:#52606d; --shadow:0 10px 25px rgba(2,6,23,.07);}
+        body{background:linear-gradient(120deg,#eef2ff 0%, #fdf2f8 100%)}
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{
+        margin:0; font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.25), transparent 40%),
+        radial-gradient(1000px 500px at 110% 10%, rgba(34,197,94,.22), transparent 40%), var(--bg);
+      }
+      header{
+        position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+      }
+      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+      .title{display:flex; gap:14px; align-items:center}
+      .logo{width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--accent),#00d4ff); box-shadow: var(--shadow)}
+      h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
+      main.wrap{padding-top: 28px}
 
-          <form data-id="${ev.id}">
-            <input name="name" placeholder="Your name" required />
-            <button>RSVP</button>
-          </form>
-          <hr/>
-        `;
-        root.appendChild(card);
-      });
+      .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin: 8px 0 18px}
+      .search{flex:1; position:relative}
+      .search input{width:100%; background:var(--card); color:var(--text); border:1px solid transparent; padding:12px 14px 12px 40px; border-radius: 12px; outline:none; box-shadow: var(--shadow)}
+      .search input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .search svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.6}
+      .btn{background:var(--accent); color:white; padding:12px 14px; border:none; border-radius:12px; cursor:pointer; box-shadow: var(--shadow); transition:transform .06s ease}
+      .btn:active{transform:translateY(1px)}
 
-      document.querySelectorAll('form').forEach(f => {
-        f.onsubmit = async e => {
-          e.preventDefault();
-          const name = f.name.value.trim();
-          if (!name) return;
-          await fetch(`${API}/rsvp`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_id: f.dataset.id, name })
+      .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:18px}
+      .card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column}
+      .media{position:relative; aspect-ratio: 16/9; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));}
+      .media img{width:100%; height:100%; object-fit:cover; display:block}
+      .datechip{position:absolute; left:12px; bottom:12px; background: color-mix(in oklab, var(--bg), white 10%); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); color:var(--text); padding:6px 10px; border-radius:999px; font-size:12.5px; backdrop-filter: blur(6px)}
+      .content{padding:14px 14px 6px}
+      .eyebrow{font-size:12px; color:var(--muted); letter-spacing:.25px}
+      .name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px}
+      .desc{color:var(--muted); margin:0 0 10px; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+      .stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
+      .stats strong{color:var(--text)}
+
+      .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
+      .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:10px 12px; border-radius:12px; outline:none}
+      .form input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .form button{background: var(--accent-2)}
+
+      .skeleton{animation: pulse 1.4s ease-in-out infinite; background: color-mix(in oklab, var(--card), white 4%); border-radius:12px; height:260px}
+      @keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
+
+      .empty{color:var(--muted); text-align:center; padding:60px 0}
+      .toast{position:fixed; inset: auto 20px 20px auto; background: var(--card); color:var(--text); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); padding:12px 14px; border-radius: 12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); pointer-events:none; transition: all .2s ease}
+      .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
+      .error{color: var(--danger)}
+      footer{color:var(--muted); text-align:center; padding:30px 0 60px}
+      a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted), transparent 45%)}
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap title" aria-live="polite">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Upcoming Events</h1>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="toolbar">
+        <div class="search" role="search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <input id="q" placeholder="Search by name or description…" aria-label="Search events" />
+        </div>
+        <button id="refresh" class="btn" type="button" title="Refresh">Refresh</button>
+      </div>
+
+      <div id="events" class="grid" aria-live="polite" aria-busy="true"></div>
+      <p id="msg" class="empty" hidden></p>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer>
+      <small>Powered by a tiny Workers API. <a class="inline" href="#" onclick="alert('Replace API const with your Worker URL after deploy.')">Configure</a></small>
+    </footer>
+
+    <script>
+      // ⚠️ replace with your Worker URL after deploy
+      const API = 'https://lpno.lpno-dev.workers.dev';
+
+      const els = {
+        list: document.getElementById('events'),
+        search: document.getElementById('q'),
+        refresh: document.getElementById('refresh'),
+        msg: document.getElementById('msg'),
+        toast: document.getElementById('toast')
+      };
+
+      const fmtDate = new Intl.DateTimeFormat(navigator.language || 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      const relTime = new Intl.RelativeTimeFormat(navigator.language || 'en-US', { numeric: 'auto' });
+
+      const escapeHTML = (s='') => s
+        .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+        .replaceAll('"','&quot;').replaceAll("'",'&#39;');
+
+      function whenRelative(iso){
+        const now = Date.now();
+        const t = new Date(iso).getTime();
+        const diff = t - now; // future is positive
+        const mins = Math.round(diff/60000);
+        if (Math.abs(mins) < 60) return relTime.format(mins, 'minute');
+        const hrs = Math.round(mins/60);
+        if (Math.abs(hrs) < 24) return relTime.format(hrs, 'hour');
+        const days = Math.round(hrs/24);
+        return relTime.format(days, 'day');
+      }
+
+      function showToast(text, ok=true){
+        els.toast.textContent = text;
+        els.toast.classList.toggle('error', !ok);
+        els.toast.classList.add('show');
+        setTimeout(()=> els.toast.classList.remove('show'), 2200);
+      }
+
+      function skeleton(n=6){
+        els.list.setAttribute('aria-busy','true');
+        els.list.innerHTML = Array.from({length:n}).map(()=>`<div class="skeleton"></div>`).join('');
+        els.msg.hidden = true;
+      }
+
+      function render(events){
+        els.list.removeAttribute('aria-busy');
+        if (!Array.isArray(events) || events.length === 0){
+          els.list.innerHTML = '';
+          els.msg.hidden = false; els.msg.textContent = 'No upcoming events yet.';
+          return;
+        }
+        const q = els.search.value.trim().toLowerCase();
+        const filtered = q ? events.filter(e => (e.name+" "+(e.description||'')).toLowerCase().includes(q)) : events;
+        if (filtered.length === 0){
+          els.list.innerHTML = '';
+          els.msg.hidden = false; els.msg.textContent = 'No matches for your search.';
+          return;
+        } else { els.msg.hidden = true; }
+
+        // Build cards safely
+        const frag = document.createDocumentFragment();
+        filtered.forEach(ev => {
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.setAttribute('data-id', ev.id);
+          card.tabIndex = 0;
+
+          const hasImg = !!ev.image_url;
+          const media = document.createElement('div');
+          media.className = 'media';
+          if (hasImg){
+            const img = document.createElement('img');
+            img.src = ev.image_url; img.alt = `${ev.name} banner`; img.loading = 'lazy'; img.decoding = 'async';
+            media.appendChild(img);
+          }
+          const chip = document.createElement('div');
+          chip.className = 'datechip';
+          chip.textContent = whenRelative(ev.time);
+          media.appendChild(chip);
+          card.appendChild(media);
+
+          const content = document.createElement('div');
+          content.className = 'content';
+          content.innerHTML = `
+            <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
+            <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
+            <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
+            <div class="stats" aria-label="RSVP counts">
+              <span><strong>${Number(ev.total_rsvps||0).toLocaleString()}</strong> RSVPs</span>
+              <span>• Meetup: ${Number(ev.meetup_rsvps||0).toLocaleString()}</span>
+              <span>• Site: ${Number(ev.local_rsvps||0).toLocaleString()}</span>
+            </div>
+          `;
+          card.appendChild(content);
+
+          const form = document.createElement('form');
+          form.className = 'form';
+          form.innerHTML = `
+            <input name="name" placeholder="Your name" aria-label="Your name" required />
+            <button class="btn">RSVP</button>
+          `;
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = form.name.value.trim();
+            if (!name) return;
+            const payload = { event_id: ev.id, name };
+            form.querySelector('button').disabled = true;
+            try{
+              const res = await fetch(`${API}/rsvp`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+              if (!res.ok) throw new Error(`RSVP failed (${res.status})`);
+              showToast('RSVP saved!');
+              await load();
+              // keep search filter applied
+            }catch(err){
+              console.error(err);
+              showToast('Could not save RSVP.', false);
+            }finally{
+              form.reset();
+              form.querySelector('button').disabled = false;
+            }
           });
-          alert('RSVP saved!');
-          load();        // refresh counts
-        };
+          card.appendChild(form);
+
+          frag.appendChild(card);
+        });
+        els.list.innerHTML = '';
+        els.list.appendChild(frag);
+        // Enter animations
+        const obs = new IntersectionObserver(entries=>{
+          entries.forEach(en=>{
+            if (en.isIntersecting){
+              en.target.animate([
+                {transform:'translateY(8px)', opacity:.001},
+                {transform:'translateY(0)', opacity:1}
+              ], {duration:260, easing:'cubic-bezier(.2,.8,.2,1)'});
+              obs.unobserve(en.target);
+            }
+          });
+        },{rootMargin:'0px 0px -10% 0px'});
+        document.querySelectorAll('.card').forEach(el=>obs.observe(el));
+      }
+
+      async function load(){
+        skeleton();
+        try{
+          const res = await fetch(`${API}/events`, { headers:{'Accept':'application/json'} });
+          const events = await res.json();
+          if (!Array.isArray(events)) throw new Error(events && (events.error || JSON.stringify(events)) || 'Invalid response');
+          // sort soonest first
+          events.sort((a,b)=> new Date(a.time) - new Date(b.time));
+          render(events);
+        }catch(err){
+          console.error(err);
+          els.list.innerHTML = '';
+          els.msg.hidden = false;
+          els.msg.innerHTML = `<span class="error">Error loading events.</span> <small>${escapeHTML(String(err.message||err))}</small>`
+        }
+      }
+
+      // Wire up actions
+      els.refresh.addEventListener('click', load);
+      els.search.addEventListener('input', () => {
+        // live filter as user types – we do not refetch to keep UX snappy
+        // We'll re-render from the last cache if available
+        // A tiny cache in memory would improve it further
       });
-    }
-    load();
-  </script>
-</body>
+
+      // Load once on start
+      load();
+    </script>
+  </body>
 </html>
+
