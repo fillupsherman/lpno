@@ -74,17 +74,68 @@
       .error{color: var(--danger)}
       footer{color:var(--muted); text-align:center; padding:30px 0 60px}
       a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted), transparent 45%)}
+      .description {
+        background: var(--card);
+        border: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 20px 24px;
+        margin: 0 0 24px;
+        text-align: center;
+      }
+
+      .description h2 {
+        font-size: clamp(20px, 2.5vw, 26px);
+        margin: 0 0 10px;
+        color: var(--text);
+      }
+
+      .description p {
+        margin: 0 auto;
+        max-width: 700px;
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+
+      .description a {
+        color: var(--accent);
+        text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%);
+        transition: color 0.2s ease;
+      }
+
+      .description a:hover {
+        color: var(--accent-2);
+      }
+      h1.gradient-title {
+        background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+      }
     </style>
   </head>
   <body>
     <header>
       <div class="wrap title" aria-live="polite">
         <div class="logo" aria-hidden="true"></div>
-        <h1>Upcoming Events</h1>
+        <h1 class="gradient-title">Leftist-Progressive Night Out!</h1>
       </div>
     </header>
 
     <main class="wrap">
+      <section class="description">
+        <h2>
+          About Our Group
+        </h2>
+        <p>
+          Leftist-Progressive Night Out is a Social Club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists of every 
+          type! Come get to know other progressives! Have fun and relax with other politically and socially progressive people in a variety of different 
+          environments! We'll be having pub nights, movie nights, game nights, pizza nights, dinner parties, and anything else that sounds like a fun night. 
+          Brainstorm, network, or just enjoy the activities with other people you'll probably like!
+        </p>
+      </section>
       <div class="toolbar">
         <div class="search" role="search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
