@@ -39,7 +39,16 @@ export default {
                     title
                     dateTime
                     description
-                    rsvps { totalCount }
+                    rsvps { 
+                      totalCount 
+                      edges {
+                        node {
+                          member {
+                            name
+                          }
+                        }
+                      }
+                    }
                     featuredEventPhoto {
                       baseUrl
                       id
@@ -73,25 +82,28 @@ export default {
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => {
         const photo = e.node.featuredEventPhoto;
+        const meetupNames = e.node.rsvps?.edges?.map(r => r.node.member.name) || [];
         return {
-          id:   e.node.id,
+          id: e.node.id,
           name: e.node.title,
           time: new Date(e.node.dateTime).getTime(),
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
-          image_url: photo
-            ? `${photo.baseUrl}${photo.id}/1024x576.jpg`   // ← insert photo.id
-            : null,
+          meetup_names: meetupNames,
+          image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description
-      }});
+        };
+      });
 
-      /* merge local RSVPs stored in KV */
+      // merge local RSVPs
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
       const combined = eventsArray.map(ev => {
-        const names = local[ev.id] || [];
+        const localNames = local[ev.id] || [];
         return {
           ...ev,
-          local_rsvps: names.length,
-          total_rsvps: ev.meetup_rsvps + names.length
+          local_rsvps: localNames.length,
+          local_names: localNames,
+          total_rsvps: ev.meetup_rsvps + localNames.length,
+          all_names: [...ev.meetup_names, ...localNames]
         };
       });
 

@@ -252,6 +252,11 @@
               <span>• Meetup: ${Number(ev.meetup_rsvps||0).toLocaleString()}</span>
               <span>• Site: ${Number(ev.local_rsvps||0).toLocaleString()}</span>
             </div>
+            ${
+              ev.all_names?.length
+                ? `<p><strong>Who’s coming:</strong> ${ev.all_names.map(escapeHTML).join(', ')}</p>`
+                : ''
+            }
           `;
           card.appendChild(content);
 
