@@ -56,7 +56,36 @@
       .content{padding:14px 14px 6px}
       .eyebrow{font-size:12px; color:var(--muted); letter-spacing:.25px}
       .name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px}
-      .desc{color:var(--muted); margin:0 0 10px; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+      .desc {
+        color: var(--muted);
+        margin: 0 0 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: max-height 0.25s ease;
+      }
+
+      .desc.expanded {
+        -webkit-line-clamp: unset;
+        overflow: visible;
+      }
+
+      .toggle-desc {
+        background: none;
+        border: none;
+        color: var(--accent);
+        font-size: 13px;
+        cursor: pointer;
+        padding: 0;
+        margin-top: -6px;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+
+      .toggle-desc:hover {
+        color: var(--accent-2);
+      }
       .stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
       .stats strong{color:var(--text)}
 
@@ -238,7 +267,7 @@
         els.msg.hidden = true;
       }
 
-      function render(events){
+      function render(events) {
         els.list.removeAttribute('aria-busy');
         if (!Array.isArray(events) || events.length === 0){
           els.list.innerHTML = '';
@@ -281,6 +310,11 @@
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
             <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
+            ${
+              ev.description && ev.description.length > 180
+                ? `<button class="toggle-desc">Read more</button>`
+                : ''
+            }
             <div class="stats" aria-label="RSVP counts">
               <span><strong>${Number(ev.total_rsvps||0).toLocaleString()}</strong> RSVPs</span>
               <span>• Meetup: ${Number(ev.meetup_rsvps||0).toLocaleString()}</span>
@@ -337,6 +371,13 @@
         });
         els.list.innerHTML = '';
         els.list.appendChild(frag);
+        document.querySelectorAll('.toggle-desc').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const desc = btn.previousElementSibling;
+            desc.classList.toggle('expanded');
+            btn.textContent = desc.classList.contains('expanded') ? 'Show less' : 'Read more';
+          });
+        });
         // Enter animations
         const obs = new IntersectionObserver(entries=>{
           entries.forEach(en=>{
