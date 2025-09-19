@@ -293,15 +293,11 @@
                     ${ev.all_names.map((n, i) => {
                       const colors = [
                         '#ef4444', // red
-                        '#f97316', // orange
-                        '#eab308', // yellow
-                        '#22c55e', // green
+                        '#fff',    // white
                         '#3b82f6', // blue
-                        '#8b5cf6', // purple
-                        '#ec4899'  // pink
                       ];
                       const color = colors[i % colors.length];
-                      return `<span class="name-badge" style="background:${color}">${escapeHTML(n)}</span>`;
+                      return `<span class="name-badge" style="background:${color}; color:${color === '#fff' ? '#000' : '#fff'}">${escapeHTML(n)}</span>`;
                     }).join('')}
                   </div>`
                 : ''
