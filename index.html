@@ -120,6 +120,28 @@
         object-fit: contain;   /* keeps proportions */
         display: block;
       }
+      .names {
+        margin: 8px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .name-badge {
+        background: color-mix(in oklab, var(--accent), white 12%);
+        color: var(--text);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        white-space: nowrap;
+        transition: background 0.2s ease;
+      }
+
+      .name-badge:hover {
+        background: var(--accent-2);
+        color: #fff;
+      }
     </style>
   </head>
   <body>
@@ -254,7 +276,10 @@
             </div>
             ${
               ev.all_names?.length
-                ? `<p><strong>Who’s coming:</strong> ${ev.all_names.map(escapeHTML).join(', ')}</p>`
+                ? `<div class="names">
+                    <strong>Who’s coming:</strong>
+                    ${ev.all_names.map(n => `<span class="name-badge">${escapeHTML(n)}</span>`).join('')}
+                  </div>`
                 : ''
             }
           `;
