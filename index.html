@@ -314,9 +314,10 @@
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.lat},${ev.lon}`;
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
-            
-            <div class="location">${escapeHTML(ev.location_name || 'Location TBD')}</div>
-            <div class="location">${escapeHTML(ev.location_city || 'Location TBD')}</div>
+            <a href="${mapUrl}" target="_blank" rel="noopener">
+              <div class="location">${escapeHTML(ev.location_name || 'Location TBD')}</div>
+              <div class="location">${escapeHTML(ev.location_city || 'Location TBD')}</div>
+            </a>
             <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
             ${
