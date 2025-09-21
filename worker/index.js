@@ -89,9 +89,7 @@ export default {
       const eventsArray = edges.map(e => {
         const photo = e.node.featuredEventPhoto;
         const meetupNames = e.node.rsvps?.edges?.map(r => r.node.member.name) || [];
-        const location_text = e.node.howToFindUs?.trim()
-          || e.node.venue?.name
-          || null;
+    
         return {
           id: e.node.id,
           name: e.node.title,
@@ -99,7 +97,8 @@ export default {
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
           meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
-          description: e.node.description, location_text
+          description: e.node.description,
+          location: e.node.venue?.name
         };
       });
 
