@@ -96,7 +96,7 @@ export default {
           meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
-          location: e.node.venue?.name
+          location: e.node.location.name_string
         };
       });
 
