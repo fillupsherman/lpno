@@ -43,6 +43,8 @@ export default {
                       name
                       city
                       state
+                      lat
+                      lon
                     }
                     rsvps { 
                       totalCount 
@@ -98,7 +100,9 @@ export default {
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
           location_name: e.node.venues[0].name,
-          location_city: e.node.venues[0].city + ', ' + e.node.venues[0].state
+          location_city: e.node.venues[0].city + ', ' + e.node.venues[0].state,
+          lat: e.node.venues[0].lat,
+          lon: e.node.venues[0].lon
         };
       });
 
