@@ -143,6 +143,13 @@
         background-clip: text;
         color: transparent;
       }
+      .gradient-title {
+        background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+      }
       .logo {
         width: 52px;
         height: 62px;
@@ -314,10 +321,16 @@
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.lat},${ev.lon}`;
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
-            <a href="${mapUrl}" target="_blank" rel="noopener">
-              <div class="location">${escapeHTML(ev.location_name || 'Location TBD')}</div>
-              <div class="location">${escapeHTML(ev.location_city || 'Location TBD')}</div>
-            </a>
+              <div class="location">
+                <a class="gradientTitle" href="${mapUrl}" target="_blank" rel="noopener">
+                  ${escapeHTML(ev.location_name || 'Location TBD')}
+                </a>
+              </div>
+              <div class="location">
+                <a class="gradientTitle" href="${mapUrl}" target="_blank" rel="noopener">
+                  ${escapeHTML(ev.location_city || 'Location TBD')}
+                </a>
+              </div>
             <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
             ${
