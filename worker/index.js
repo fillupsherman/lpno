@@ -40,7 +40,9 @@ export default {
                     dateTime
                     description
                     eventUrl
-                    howToFindUs
+                    location{
+                      name_string
+                    }
                     rsvps { 
                       totalCount 
                       edges {
@@ -54,10 +56,6 @@ export default {
                     featuredEventPhoto {
                       baseUrl
                       id
-                    }
-                    venue {
-                      name
-                      address
                     }
                   }
                 }
