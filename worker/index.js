@@ -39,6 +39,13 @@ export default {
                     title
                     dateTime
                     description
+                    eventUrl
+                    venue {
+                      name
+                      address
+                      city
+                    }
+                    onlineEvent
                     rsvps { 
                       totalCount 
                       edges {
@@ -90,7 +97,10 @@ export default {
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
           meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
-          description: e.node.description
+          description: e.node.description,
+          location: e.node.onlineEvent
+            ? "Online event"
+            : [e.node.venue?.name, e.node.venue?.city].filter(Boolean).join(", ")
         };
       });
 

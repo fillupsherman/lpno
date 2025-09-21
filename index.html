@@ -182,6 +182,11 @@
       .name-badge:hover {
         transform: scale(1.08);
       }
+      .location {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 2px 0 8px;
+      }
 
     </style>
   </head>
@@ -308,6 +313,7 @@
           content.className = 'content';
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
+            <div class="location">${escapeHTML(ev.location || 'Location TBD')}</div>
             <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
             ${
