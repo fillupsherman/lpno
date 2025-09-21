@@ -86,7 +86,7 @@ export default {
       const eventsArray = edges.map(e => {
         const photo = e.node.featuredEventPhoto;
         const meetupNames = e.node.rsvps?.edges?.map(r => r.node.member.name) || [];
-    
+        console.log(e.node.venues);
         return {
           id: e.node.id,
           name: e.node.title,
