@@ -39,7 +39,7 @@ export default {
                     title
                     dateTime
                     description
-                    venues {
+                    venue {
                       name
                     }
                     rsvps { 
@@ -95,7 +95,7 @@ export default {
           meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
-          location: e.node.venues.name
+          location: e.node.venue.name
         };
       });
 
