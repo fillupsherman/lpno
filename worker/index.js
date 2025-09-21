@@ -39,9 +39,8 @@ export default {
                     title
                     dateTime
                     description
-                    eventUrl
-                    location{
-                      name_string
+                    venues {
+                      name
                     }
                     rsvps { 
                       totalCount 
@@ -96,7 +95,7 @@ export default {
           meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
-          location: e.node.location.name_string
+          location: e.node.venues.name
         };
       });
 
