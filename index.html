@@ -143,13 +143,6 @@
         background-clip: text;
         color: transparent;
       }
-      .gradient-title {
-        background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        color: transparent;
-      }
       .logo {
         width: 52px;
         height: 62px;
@@ -194,7 +187,22 @@
         color: var(--muted);
         margin: 2px 0 1px;
       }
+      .gradient-underline {
+        position: relative;
+        color: var(--text);
+        text-decoration: none; /* remove default underline */
+      }
 
+      .gradient-underline::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;   /* adjust distance from text */
+        width: 100%;
+        height: 3px;    /* thickness of underline */
+        background: linear-gradient(90deg,#ef4444, #ffffff, #3b82f6);
+        border-radius: 2px;
+      }
     </style>
   </head>
   <body>
@@ -322,12 +330,12 @@
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
               <div class="location">
-                <a class="gradient-title" href="${mapUrl}" target="_blank" rel="noopener">
+                <a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">
                   ${escapeHTML(ev.location_name || 'Location TBD')}
                 </a>
               </div>
               <div class="location">
-                <a class="gradient-title" href="${mapUrl}" target="_blank" rel="noopener">
+                <a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">
                   ${escapeHTML(ev.location_city || 'Location TBD')}
                 </a>
               </div>
