@@ -36,7 +36,7 @@
       }
       .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
       .title{display:flex; gap:14px; align-items:center}
-      .logo{width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,var(--accent),#00d4ff); box-shadow: var(--shadow)}
+      .logo{width:52px; height:62px; object-fit:contain; display:block}
       h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
       main.wrap{padding-top: 28px}
 
@@ -65,27 +65,9 @@
         overflow: hidden;
         transition: max-height 0.25s ease;
       }
-
-      .desc.expanded {
-        -webkit-line-clamp: unset;
-        overflow: visible;
-      }
-
-      .toggle-desc {
-        background: none;
-        border: none;
-        color: var(--accent);
-        font-size: 13px;
-        cursor: pointer;
-        padding: 0;
-        margin-top: -6px;
-        margin-bottom: 10px;
-        text-align: left;
-      }
-
-      .toggle-desc:hover {
-        color: var(--accent-2);
-      }
+      .desc.expanded { -webkit-line-clamp: unset; overflow: visible; }
+      .toggle-desc { background:none; border:none; color:var(--accent); font-size:13px; cursor:pointer; padding:0; margin-top:-6px; margin-bottom:10px; text-align:left;}
+      .toggle-desc:hover { color:var(--accent-2);}
       .stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
       .stats strong{color:var(--text)}
 
@@ -112,30 +94,10 @@
         margin: 0 0 24px;
         text-align: center;
       }
-
-      .description h2 {
-        font-size: clamp(20px, 2.5vw, 26px);
-        margin: 0 0 10px;
-        color: var(--text);
-      }
-
-      .description p {
-        margin: 0 auto;
-        max-width: 700px;
-        font-size: 15px;
-        line-height: 1.6;
-        color: var(--muted);
-      }
-
-      .description a {
-        color: var(--accent);
-        text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%);
-        transition: color 0.2s ease;
-      }
-
-      .description a:hover {
-        color: var(--accent-2);
-      }
+      .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
+      .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
+      .description a { color:var(--accent); text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;}
+      .description a:hover { color: var(--accent-2);}
       h1.gradient-title {
         background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
         -webkit-background-clip: text;
@@ -143,140 +105,39 @@
         background-clip: text;
         color: transparent;
       }
-      .logo {
-        width: 52px;
-        height: 62px;
-        object-fit: contain;   /* keeps proportions */
-        display: block;
-      }
-      .names {
-        margin: 12px 0 0;
-        padding: 10px;
-        background: color-mix(in oklab, var(--card), white 3%);
-        border: 1px solid color-mix(in oklab, var(--muted), transparent 70%);
-        border-radius: var(--radius-sm);
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
-      }
+      .names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), white 3%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);}
+      .names strong { flex-basis:100%; margin-bottom:4px; font-size:13px; color:var(--muted);}
+      .name-badge { color:#fff; padding:4px 10px; border-radius:999px; font-size:13px; font-weight:500; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.15); transition: transform 0.15s ease;}
+      .name-badge:hover { transform:scale(1.08);}
+      .location { font-size:13px; color:var(--muted); margin:2px 0 1px;}
+      .gradient-underline { position:relative; color:var(--muted); text-decoration:none;}
+      .gradient-underline::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:linear-gradient(90deg,#ef4444, #ffffff, #3b82f6); border-radius:1px;}
 
-      .names strong {
-        flex-basis: 100%;
-        margin-bottom: 4px;
-        font-size: 13px;
-        color: var(--muted);
-      }
-
-      .name-badge {
-        color: #fff;
-        padding: 4px 10px;
-        border-radius: 999px;
-        font-size: 13px;
-        font-weight: 500;
-        white-space: nowrap;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        transition: transform 0.15s ease;
-      }
-
-      .name-badge:hover {
-        transform: scale(1.08);
-      }
-      .location {
-        font-size: 13px;
-        color: var(--muted);
-        margin: 2px 0 1px;
-      }
-      .gradient-underline {
-        position: relative;
-        color: var(--muted);
-        text-decoration: none; /* remove default underline */
-      }
-
-      .gradient-underline::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;   /* adjust distance from text */
-        width: 100%;
-        height: 1px;    /* thickness of underline */
-        background: linear-gradient(90deg,#ef4444, #ffffff, #3b82f6);
-        border-radius: 1px;
-      }
-      /* desktop nav */
+      /* nav with icons */
       .nav-desktop {
-        margin-left: auto;
-        display: flex;
-        gap: 18px;
+        margin-left:auto;
+        display:flex;
+        gap:22px;
       }
       .nav-desktop a {
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        text-decoration:none;
+        color:var(--text);
+        font-weight:600;
+        font-size:15px;
+        transition:color 0.2s;
       }
-      .nav-desktop a:hover {
-        color: var(--accent-2);
-      }
+      .nav-desktop a:hover { color:var(--accent-2);}
+      .nav-desktop .icon { font-size:20px; margin-bottom:4px;}
+      .nav-desktop .label { display:inline;}
 
-      /* hamburger button */
-      .nav-toggle {
-        margin-left: auto;
-        font-size: 26px;
-        background: none;
-        border: none;
-        color: var(--text);
-        cursor: pointer;
-        display: none;
+      @media (max-width:768px){
+        .nav-desktop { gap:16px;}
+        .nav-desktop .label { display:none;}
+        .nav-desktop .icon { font-size:22px; margin-bottom:0;}
       }
-
-      /* mobile nav drawer */
-      .nav-mobile {
-        position: fixed;
-        top: 0;
-        right: -280px;
-        width: 260px;
-        height: 100%;
-        background: var(--card);
-        box-shadow: var(--shadow);
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        transition: right 0.3s ease;
-        z-index: 50;
-      }
-      .nav-mobile.open {
-        right: 0;
-      }
-      .nav-mobile a {
-        color: var(--text);
-        text-decoration: none;
-        font-size: 16px;
-      }
-      .nav-mobile a:hover {
-        color: var(--accent-2);
-      }
-      .close-nav {
-        align-self: flex-end;
-        font-size: 24px;
-        background: none;
-        border: none;
-        color: var(--text);
-        cursor: pointer;
-        margin-bottom: 20px;
-      }
-
-      /* responsive breakpoints */
-      @media (max-width: 768px) {
-        .nav-desktop {
-          display: none;
-        }
-        .nav-toggle {
-          display: block;
-        }
-      }
-
     </style>
   </head>
   <body>
@@ -287,35 +148,20 @@
         </a>
         <h1 class="gradient-title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
         <nav class="nav-desktop">
-          <a href="events.html">Events</a>
-          <a href="join.html">Join Mailing List</a>
-          <a href="volunteer.html">Volunteer</a>
-          <a href="donate.html">Donate</a>
-          <a href="find.html">Find a Chapter</a>
-          <a href="start.html">Start a Chapter</a>
-          <a href="about.html">About Us</a>
+          <a href="events.html"><span class="icon">📅</span><span class="label">Events</span></a>
+          <a href="join.html"><span class="icon">✉️</span><span class="label">Join Mailing List</span></a>
+          <a href="volunteer.html"><span class="icon">🤝</span><span class="label">Volunteer</span></a>
+          <a href="donate.html"><span class="icon">💖</span><span class="label">Donate</span></a>
+          <a href="find.html"><span class="icon">📍</span><span class="label">Find a Chapter</span></a>
+          <a href="start.html"><span class="icon">🚀</span><span class="label">Start a Chapter</span></a>
+          <a href="about.html"><span class="icon">ℹ️</span><span class="label">About Us</span></a>
         </nav>
-        <button class="nav-toggle" aria-label="Menu">☰</button>
       </div>
     </header>
 
-    <!-- mobile side drawer -->
-    <nav class="nav-mobile" id="mobileNav">
-      <button class="close-nav" aria-label="Close menu">×</button>
-      <a href="events.html">Events</a>
-      <a href="join.html">Join Mailing List</a>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="donate.html">Donate</a>
-      <a href="find.html">Find a Chapter</a>
-      <a href="start.html">Start a Chapter</a>
-      <a href="about.html">About Us</a>
-    </nav>
-
     <main class="wrap">
       <section class="description">
-        <h2>
-          About Our Club
-        </h2>
+        <h2>About Our Club</h2>
         <p>
           Leftist-Progressive Night Out! is a NJ based social club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists of every 
           type! Come get to know other progressives! Have fun and relax with other politically and socially progressive people in a variety of different 
@@ -342,9 +188,7 @@
     </footer>
 
     <script>
-      // ⚠️ replace with your Worker URL after deploy
       const API = 'https://lpno.lpno-dev.workers.dev';
-
       const els = {
         list: document.getElementById('events'),
         search: document.getElementById('q'),
@@ -352,7 +196,6 @@
         msg: document.getElementById('msg'),
         toast: document.getElementById('toast')
       };
-
       const fmtDate = new Intl.DateTimeFormat(navigator.language || 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
       const relTime = new Intl.RelativeTimeFormat(navigator.language || 'en-US', { numeric: 'auto' });
 
@@ -363,7 +206,7 @@
       function whenRelative(iso){
         const now = Date.now();
         const t = new Date(iso).getTime();
-        const diff = t - now; // future is positive
+        const diff = t - now;
         const mins = Math.round(diff/60000);
         if (Math.abs(mins) < 60) return relTime.format(mins, 'minute');
         const hrs = Math.round(mins/60);
@@ -371,20 +214,17 @@
         const days = Math.round(hrs/24);
         return relTime.format(days, 'day');
       }
-
       function showToast(text, ok=true){
         els.toast.textContent = text;
         els.toast.classList.toggle('error', !ok);
         els.toast.classList.add('show');
         setTimeout(()=> els.toast.classList.remove('show'), 2200);
       }
-
       function skeleton(n=6){
         els.list.setAttribute('aria-busy','true');
         els.list.innerHTML = Array.from({length:n}).map(()=>`<div class="skeleton"></div>`).join('');
         els.msg.hidden = true;
       }
-
       function render(events) {
         els.list.removeAttribute('aria-busy');
         if (!Array.isArray(events) || events.length === 0){
@@ -399,15 +239,12 @@
           els.msg.hidden = false; els.msg.textContent = 'No matches for your search.';
           return;
         } else { els.msg.hidden = true; }
-
-        // Build cards safely
         const frag = document.createDocumentFragment();
         filtered.forEach(ev => {
           const card = document.createElement('article');
           card.className = 'card';
           card.setAttribute('data-id', ev.id);
           card.tabIndex = 0;
-
           const hasImg = !!ev.image_url;
           const media = document.createElement('div');
           media.className = 'media';
@@ -421,7 +258,6 @@
           chip.textContent = whenRelative(ev.time);
           media.appendChild(chip);
           card.appendChild(media);
-
           const content = document.createElement('div');
           content.className = 'content';
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.lat},${ev.lon}`;
@@ -454,11 +290,7 @@
                 ? `<div class="names">
                     <strong>Who’s coming:</strong>
                     ${ev.all_names.map((n, i) => {
-                      const colors = [
-                        '#ef4444', // red
-                        '#fff',    // white
-                        '#3b82f6', // blue
-                      ];
+                      const colors = ['#ef4444', '#fff', '#3b82f6'];
                       const color = colors[i % colors.length];
                       return `<span class="name-badge" style="background:${color}; color:${color === '#fff' ? '#000' : '#fff'}">${escapeHTML(n)}</span>`;
                     }).join('')}
@@ -467,7 +299,6 @@
             }
           `;
           card.appendChild(content);
-
           const form = document.createElement('form');
           form.className = 'form';
           form.innerHTML = `
@@ -485,7 +316,6 @@
               if (!res.ok) throw new Error(`RSVP failed (${res.status})`);
               showToast('RSVP saved!');
               await load();
-              // keep search filter applied
             }catch(err){
               console.error(err);
               showToast('Could not save RSVP.', false);
@@ -495,7 +325,6 @@
             }
           });
           card.appendChild(form);
-
           frag.appendChild(card);
         });
         els.list.innerHTML = '';
@@ -507,7 +336,6 @@
             btn.textContent = desc.classList.contains('expanded') ? 'Show less' : 'Read more';
           });
         });
-        // Enter animations
         const obs = new IntersectionObserver(entries=>{
           entries.forEach(en=>{
             if (en.isIntersecting){
@@ -521,14 +349,12 @@
         },{rootMargin:'0px 0px -10% 0px'});
         document.querySelectorAll('.card').forEach(el=>obs.observe(el));
       }
-
       async function load(){
         skeleton();
         try{
           const res = await fetch(`${API}/events`, { headers:{'Accept':'application/json'} });
           const events = await res.json();
           if (!Array.isArray(events)) throw new Error(events && (events.error || JSON.stringify(events)) || 'Invalid response');
-          // sort soonest first
           events.sort((a,b)=> new Date(a.time) - new Date(b.time));
           render(events);
         }catch(err){
@@ -538,37 +364,8 @@
           els.msg.innerHTML = `<span class="error">Error loading events.</span> <small>${escapeHTML(String(err.message||err))}</small>`
         }
       }
-
-      // Wire up actions
       els.refresh.addEventListener('click', load);
-      els.search.addEventListener('input', () => {
-        // live filter as user types – we do not refetch to keep UX snappy
-        // We'll re-render from the last cache if available
-        // A tiny cache in memory would improve it further
-      });
-
-      // Load once on start
       load();
-      // Mobile nav toggle
-      const navToggle = document.querySelector('.nav-toggle');
-      const mobileNav = document.getElementById('mobileNav');
-      const closeNav = document.querySelector('.close-nav');
-
-      navToggle.addEventListener('click', () => {
-        mobileNav.classList.add('open');
-      });
-
-      closeNav.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-      });
-
-      // optional: close when clicking outside
-      document.addEventListener('click', (e) => {
-        if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !navToggle.contains(e.target)) {
-          mobileNav.classList.remove('open');
-        }
-      });
     </script>
   </body>
 </html>
-
