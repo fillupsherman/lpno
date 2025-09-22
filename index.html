@@ -132,7 +132,6 @@
 
       /* nav with icons */
       .nav-desktop {
-        margin-left:auto;
         display:flex;
         gap:22px;
         justify-content: center;
@@ -150,7 +149,80 @@
       .nav-desktop a:hover { color:var(--accent-2);}
       .nav-desktop .icon { font-size:20px; margin-bottom:4px;}
       .nav-desktop .label { display:inline;}
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+      }
 
+      .header-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;  /* logo | content */
+        grid-template-rows: auto auto;    /* title row, nav row */
+        column-gap: 16px;
+        row-gap: 8px;
+        align-items: center;
+      }
+
+      /* Logo spans both rows (title + nav) */
+      .header-grid .brand {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        align-items: center;
+      }
+
+      .header-grid .logo {
+        height: 88px;         /* tweak to taste */
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Title sits to the right, first row */
+      .header-grid h1 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+      }
+
+      /* Nav sits to the right, second row */
+      .header-grid .nav-desktop {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+
+        /* optional: subtle pill to match your UI, comment out if not wanted */
+        background: color-mix(in oklab, var(--card), transparent 18%);
+        border: 1px solid color-mix(in oklab, var(--muted), transparent 75%);
+        border-radius: 999px;
+        padding: 8px 12px;
+      }
+
+      .header-grid .nav-desktop a {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color .2s;
+      }
+
+      .header-grid .nav-desktop a:hover {
+        color: var(--accent-2);
+      }
+
+      /* Responsive: scale logo down slightly on small screens */
+      @media (max-width: 640px) {
+        .header-grid .logo { height: 72px; }
+        .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
+      }
       @media (max-width:768px){
         .nav-desktop { gap:16px;}
         .nav-desktop .label { display:none;}
@@ -159,14 +231,15 @@
     </style>
   </head>
   <body>
-    <header>
-      <div class="wrap title">
-        <a href="events.html">
+    <header class="site-header">
+      <div class="wrap header-grid">
+        <a href="events.html" class="brand" aria-label="Home">
           <img src="images/lpno.png" alt="LPNO logo" class="logo" />
         </a>
+
         <h1 class="gradient-title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
-      </div>
-      <nav class="nav-desktop">
+
+        <nav class="nav-desktop">
           <a href="events.html"><span class="icon">📅 Events</span></a>
           <a href="join.html"><span class="icon">✉️ Mailing List</span></a>
           <a href="volunteer.html"><span class="icon">🤝 Volunteer</span></a>
@@ -175,6 +248,7 @@
           <a href="start.html"><span class="icon">🚀 Start a Chapter</span></a>
           <a href="about.html"><span class="icon">ℹ️ About Us</span></a>
         </nav>
+      </div>
     </header>
 
     <main class="wrap">
