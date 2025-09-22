@@ -218,6 +218,7 @@
         .header-grid .logo { height: 72px; }
         .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
         .header-grid .brand { display: none; }
+        .title { font-size: 20px;}
       }
     </style>
   </head>
@@ -229,7 +230,7 @@
             <img src="images/lpno.png" alt="LPNO logo" class="logo" />
           </a>
         </span>
-        <h1>Leftist-Progressive Night Out! - New Jersey Chapter</h1>
+        <h1 class="title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
 
         <nav class="nav-desktop">
           <a href="events.html"><span class="icon">📅 <span class="label">Events</span></span></a>
@@ -451,41 +452,5 @@
       els.refresh.addEventListener('click', load);
       load();
     </script>
-    <script>
-      (function fitTitle() {
-        const grid  = document.querySelector('.header-grid');
-        const brand = grid?.querySelector('.brand');   // the logo link
-        const h1    = grid?.querySelector('h1');
-        if (!grid || !brand || !h1) return;
-
-        h1.style.whiteSpace = 'nowrap';
-
-        function available() {
-          const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
-          return Math.max(0, grid.clientWidth - brand.getBoundingClientRect().width - gap);
-        }
-
-        function resize() {
-          const MAX = 34;   // px — your desktop cap
-          const MIN = 12;   // px — do not go smaller than this
-          const step = 0.5; // px
-
-          // Always start from MAX, then only shrink until it fits.
-          h1.style.fontSize = MAX + 'px';
-          const w = available();
-
-          // If it overflows, shrink in small steps until it fits or MIN is reached.
-          while (h1.scrollWidth > w && parseFloat(h1.style.fontSize) > MIN) {
-            h1.style.fontSize = (parseFloat(h1.style.fontSize) + step) + 'px';
-          }
-        }
-
-        const ro = new ResizeObserver(resize);
-        ro.observe(grid);
-        window.addEventListener('orientationchange', resize);
-        resize();
-      })();
-    </script>
-
   </body>
 </html>
