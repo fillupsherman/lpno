@@ -160,12 +160,11 @@
 
       .header-grid {
         display: grid;
+        grid-template-columns: auto 1fr;  /* logo | content */
         grid-template-rows: auto auto;    /* title row, nav row */
         column-gap: 16px;
         row-gap: 8px;
         align-items: center;
-        grid-template-columns: auto minmax(0, 1fr); /* logo | (title+nav) */
-        container-type: inline-size; 
       }
 
       /* Logo spans both rows (title + nav) */
@@ -187,7 +186,7 @@
         grid-column: 2;
         grid-row: 1;
         margin: 0;
-        font-size: clamp(16px, 7.2cqw, 34px);
+        font-size: clamp(14px, 8.5cqw, 24px);
       }
       .header-grid .nav-desktop {
         grid-column: 2;
@@ -220,8 +219,7 @@
         .header-grid .logo { height: 72px; }
         .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
         .header-grid .brand { display: none; }
-        .header-grid h1{ font-size: clamp(14px, 8.5cqw, 24px); }
-        .title { font-size: 20px;}
+        h1 .title {font-size: clamp(14px, 8.5cqw, 24px);}
       }
     </style>
   </head>
