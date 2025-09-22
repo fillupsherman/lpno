@@ -476,7 +476,7 @@
 
           // If it overflows, shrink in small steps until it fits or MIN is reached.
           while (h1.scrollWidth > w && parseFloat(h1.style.fontSize) > MIN) {
-            h1.style.fontSize = (parseFloat(h1.style.fontSize) - step) + 'px';
+            h1.style.fontSize = (parseFloat(h1.style.fontSize) + step) + 'px';
           }
         }
 
