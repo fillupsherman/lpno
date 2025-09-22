@@ -229,7 +229,7 @@
             <img src="images/lpno.png" alt="LPNO logo" class="logo" />
           </a>
         </span>
-        <h1 class="gradient-text">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
+        <h1>Leftist-Progressive Night Out! - New Jersey Chapter</h1>
 
         <nav class="nav-desktop">
           <a href="events.html"><span class="icon">📅 <span class="label">Events</span></span></a>
@@ -450,6 +450,41 @@
       }
       els.refresh.addEventListener('click', load);
       load();
+    </script>
+    <script>
+      (function fitTitleToOneLine() {
+        const grid  = document.querySelector('.header-grid');
+        const brand = grid?.querySelector('.brand');
+        const h1    = grid?.querySelector('h1');
+        if (!grid || !brand || !h1) return;
+
+        h1.style.whiteSpace = 'nowrap';
+
+        function availableWidth() {
+          const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+          return Math.max(0, grid.clientWidth - brand.getBoundingClientRect().width - gap - 2);
+        }
+
+        function resize() {
+          const max = 34;              // your max desktop px
+          const min = 14;              // don't go smaller than this
+          let size  = parseFloat(getComputedStyle(h1).fontSize) || max;
+
+          // allow the title to occupy only the right column
+          const avail = availableWidth();
+          h1.style.maxWidth = avail + 'px';
+
+          // try growing up to max
+          while (h1.scrollWidth <= avail && size < max) { size += 0.5; h1.style.fontSize = size + 'px'; }
+          // if too big, shrink down to min
+          while (h1.scrollWidth >  avail && size > min) { size -= 0.5; h1.style.fontSize = size + 'px'; }
+        }
+
+        const ro = new ResizeObserver(resize);
+        ro.observe(grid);
+        window.addEventListener('orientationchange', resize);
+        resize();
+      })();
     </script>
   </body>
 </html>
