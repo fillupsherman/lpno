@@ -115,13 +115,12 @@
       .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
       .description a { color:var(--accent); text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;}
       .description a:hover { color: var(--accent-2);}
-      h1.gradient-title {
+      .gradient-text {
         background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         color: transparent;
-        justify-self: center;
       }
       .names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), white 3%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);}
       .names strong { flex-basis:100%; margin-bottom:4px; font-size:13px; color:var(--muted);}
@@ -231,22 +230,22 @@
           <img src="images/lpno.png" alt="LPNO logo" class="logo" />
         </a>
 
-        <h1 class="gradient-title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
+        <h1 class="gradient-text">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
 
         <nav class="nav-desktop">
-          <a href="events.html"><span class="icon">📅 Events</span></a>
-          <a href="join.html"><span class="icon">✉️ Mailing List</span></a>
-          <a href="volunteer.html"><span class="icon">🤝 Volunteer</span></a>
-          <a href="donate.html"><span class="icon">💖 Donate</span></a>
-          <a href="find.html"><span class="icon">📍 Find a Chapter</span></a>
-          <a href="start.html"><span class="icon">🚀 Start a Chapter</span></a>
-          <a href="about.html"><span class="icon">ℹ️ About Us</span></a>
+          <a href="events.html"><span class="icon">📅 <span class="label">Events</span></span></a>
+          <a href="join.html"><span class="icon">✉️ <span class="label">Mailing List</span></span></a>
+          <a href="volunteer.html"><span class="icon">🤝 <span class="label">Volunteer</span></span></a>
+          <a href="donate.html"><span class="icon">💖 <span class="label">Donate</span></span></a>
+          <a href="find.html"><span class="icon">📍 <span class="label">Find a Chapter</span></span></a>
+          <a href="start.html"><span class="icon">🚀 <span class="label">Start a Chapter</span></span></a>
+          <a href="about.html"><span class="icon">ℹ️ <span class="label">About Us</span></span></a>
         </nav>
       </div>
     </header>
 
     <main class="wrap">
-      <section class="description">
+      <!--<section class="description">
         <h2>About Our Club</h2>
         <p>
           Leftist-Progressive Night Out! is a NJ based social club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists of every 
@@ -254,7 +253,7 @@
           environments! We'll be having pub nights, movie nights, game nights, pizza nights, dinner parties, and anything else that sounds like a fun night. 
           Brainstorm, network, or just enjoy the activities with other people you'll probably like!
         </p>
-      </section>
+      </section>-->
       <div class="toolbar">
         <div class="search" role="search">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
