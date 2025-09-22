@@ -121,6 +121,7 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
         color: transparent;
+        justify-self: center;
       }
       .names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), white 3%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);}
       .names strong { flex-basis:100%; margin-bottom:4px; font-size:13px; color:var(--muted);}
@@ -147,7 +148,7 @@
         transition:color 0.2s;
       }
       .nav-desktop a:hover { color:var(--accent-2);}
-      .nav-desktop .icon { font-size:20px; margin-bottom:4px;}
+      .nav-desktop .icon { font-size:20px; margin-bottom:4px; white-space: nowrap;}
       .nav-desktop .label { display:inline;}
       .site-header {
         position: sticky;
@@ -187,20 +188,13 @@
         grid-row: 1;
         margin: 0;
       }
-
-      /* Nav sits to the right, second row */
       .header-grid .nav-desktop {
         grid-column: 2;
         grid-row: 2;
         display: flex;
         gap: 18px;
         align-items: center;
-
-        /* optional: subtle pill to match your UI, comment out if not wanted */
-        background: color-mix(in oklab, var(--card), transparent 18%);
-        border: 1px solid color-mix(in oklab, var(--muted), transparent 75%);
-        border-radius: 999px;
-        padding: 8px 12px;
+        padding: 8px 0px;
       }
 
       .header-grid .nav-desktop a {
