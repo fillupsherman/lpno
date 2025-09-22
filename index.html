@@ -161,9 +161,6 @@
       .header-grid {
         display: grid;
         grid-template-rows: auto auto;    /* title row, nav row */
-        max-width: 100%; 
-        overflow: hidden; 
-        text-overflow: clip;
         column-gap: 16px;
         row-gap: 8px;
         align-items: center;
@@ -187,6 +184,9 @@
 
       /* Title sits to the right, first row */
       .header-grid h1 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
         font-size: clamp(16px, 7.2cqw, 34px);
       }
       .header-grid .nav-desktop {
@@ -220,9 +220,8 @@
         .header-grid .logo { height: 72px; }
         .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
         .header-grid .brand { display: none; }
-        .header-grid h1{ font-size: clamp(14px, 8.5cqw, 24px);}
+        .header-grid h1{ font-size: clamp(14px, 8.5cqw, 24px); }
         .title { font-size: 20px;}
-
       }
     </style>
   </head>
