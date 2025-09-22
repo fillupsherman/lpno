@@ -29,14 +29,31 @@
         color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(124,92,255,.25), transparent 40%),
         radial-gradient(1000px 500px at 110% 10%, rgba(34,197,94,.22), transparent 40%), var(--bg);
       }
-      header{
-        position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px);
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
         background: color-mix(in oklab, var(--bg), transparent 40%);
         border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        display: flex;
+        flex-direction: column;   /* stack title + nav */
+      }
+
+      header .wrap.title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo {
+        width: 80px;   /* bigger logo */
+        height: auto;  /* keeps proportions */
+        align-self: stretch;  /* spans height of the flex row */
+        object-fit: contain;
       }
       .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
       .title{display:flex; gap:14px; align-items:center}
-      .logo{width:52px; height:62px; object-fit:contain; display:block}
       h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
       main.wrap{padding-top: 28px}
 
@@ -123,6 +140,7 @@
         display:flex;
         flex-direction:column;
         align-items:center;
+        justify-content: center;
         text-decoration:none;
         color:var(--text);
         font-weight:600;
@@ -147,16 +165,16 @@
           <img src="images/lpno.png" alt="LPNO logo" class="logo" />
         </a>
         <h1 class="gradient-title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
-        <nav class="nav-desktop">
-          <a href="events.html"><span class="icon">📅</span><span class="label">Events</span></a>
-          <a href="join.html"><span class="icon">✉️</span><span class="label">Join Mailing List</span></a>
-          <a href="volunteer.html"><span class="icon">🤝</span><span class="label">Volunteer</span></a>
-          <a href="donate.html"><span class="icon">💖</span><span class="label">Donate</span></a>
-          <a href="find.html"><span class="icon">📍</span><span class="label">Find a Chapter</span></a>
-          <a href="start.html"><span class="icon">🚀</span><span class="label">Start a Chapter</span></a>
-          <a href="about.html"><span class="icon">ℹ️</span><span class="label">About Us</span></a>
-        </nav>
       </div>
+      <nav class="nav-desktop">
+          <a href="events.html"><span class="icon">📅 Events</span></a>
+          <a href="join.html"><span class="icon">✉️ Mailing List</span></a>
+          <a href="volunteer.html"><span class="icon">🤝 Volunteer</span></a>
+          <a href="donate.html"><span class="icon">💖 Donate</span></a>
+          <a href="find.html"><span class="icon">📍 Find a Chapter</span></a>
+          <a href="start.html"><span class="icon">🚀 Start a Chapter</span></a>
+          <a href="about.html"><span class="icon">ℹ️ About Us</span></a>
+        </nav>
     </header>
 
     <main class="wrap">
