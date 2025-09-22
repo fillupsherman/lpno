@@ -54,7 +54,7 @@
       }
       .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
       .title{display:flex; gap:14px; align-items:center}
-      h1{font-size: clamp(14px, 8.5cqw, 24px); margin:0; letter-spacing:.2px}
+      h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
       main.wrap{padding-top: 28px}
 
       .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin: 8px 0 18px}
@@ -160,11 +160,15 @@
 
       .header-grid {
         display: grid;
-        grid-template-columns: auto 1fr;  /* logo | content */
         grid-template-rows: auto auto;    /* title row, nav row */
+        max-width: 100%; 
+        overflow: hidden; 
+        text-overflow: clip;
         column-gap: 16px;
         row-gap: 8px;
         align-items: center;
+        grid-template-columns: auto minmax(0, 1fr); /* logo | (title+nav) */
+        container-type: inline-size; 
       }
 
       /* Logo spans both rows (title + nav) */
@@ -183,9 +187,7 @@
 
       /* Title sits to the right, first row */
       .header-grid h1 {
-        grid-column: 2;
-        grid-row: 1;
-        margin: 0;
+        font-size: clamp(16px, 7.2cqw, 34px);
       }
       .header-grid .nav-desktop {
         grid-column: 2;
@@ -218,7 +220,9 @@
         .header-grid .logo { height: 72px; }
         .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
         .header-grid .brand { display: none; }
+        .header-grid h1{ font-size: clamp(14px, 8.5cqw, 24px);}
         .title { font-size: 20px;}
+
       }
     </style>
   </head>
