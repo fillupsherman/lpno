@@ -451,5 +451,29 @@
       els.refresh.addEventListener('click', load);
       load();
     </script>
+    <script>
+      (function fitTitle(){
+        const el = document.querySelector('.header-grid h1');
+        if (!el) return;
+
+        const base = 34;       // your max desktop size (px)
+        const min  = 14;       // don't go smaller than this
+        el.style.whiteSpace = 'nowrap';
+
+        function shrink() {
+          // reset to base each time, then shrink until it fits
+          el.style.fontSize = base + 'px';
+          let size = base;
+          const box = el.parentElement; // the grid column
+          while (el.scrollWidth > box.clientWidth && size > min) {
+            size -= 0.5;
+            el.style.fontSize = size + 'px';
+          }
+        }
+        new ResizeObserver(shrink).observe(el.parentElement);
+        window.addEventListener('orientationchange', shrink);
+        shrink();
+      })();
+    </script>
   </body>
 </html>
