@@ -203,15 +203,113 @@
         background: linear-gradient(90deg,#ef4444, #ffffff, #3b82f6);
         border-radius: 1px;
       }
+      /* desktop nav */
+      .nav-desktop {
+        margin-left: auto;
+        display: flex;
+        gap: 18px;
+      }
+      .nav-desktop a {
+        color: var(--text);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .nav-desktop a:hover {
+        color: var(--accent-2);
+      }
+
+      /* hamburger button */
+      .nav-toggle {
+        margin-left: auto;
+        font-size: 26px;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        display: none;
+      }
+
+      /* mobile nav drawer */
+      .nav-mobile {
+        position: fixed;
+        top: 0;
+        right: -280px;
+        width: 260px;
+        height: 100%;
+        background: var(--card);
+        box-shadow: var(--shadow);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        transition: right 0.3s ease;
+        z-index: 50;
+      }
+      .nav-mobile.open {
+        right: 0;
+      }
+      .nav-mobile a {
+        color: var(--text);
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .nav-mobile a:hover {
+        color: var(--accent-2);
+      }
+      .close-nav {
+        align-self: flex-end;
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+
+      /* responsive breakpoints */
+      @media (max-width: 768px) {
+        .nav-desktop {
+          display: none;
+        }
+        .nav-toggle {
+          display: block;
+        }
+      }
+
     </style>
   </head>
   <body>
     <header>
-      <div class="wrap title" aria-live="polite">
-        <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+      <div class="wrap title">
+        <a href="events.html">
+          <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+        </a>
         <h1 class="gradient-title">Leftist-Progressive Night Out! - New Jersey Chapter</h1>
+        <nav class="nav-desktop">
+          <a href="events.html">Events</a>
+          <a href="join.html">Join Mailing List</a>
+          <a href="volunteer.html">Volunteer</a>
+          <a href="donate.html">Donate</a>
+          <a href="find.html">Find a Chapter</a>
+          <a href="start.html">Start a Chapter</a>
+          <a href="about.html">About Us</a>
+        </nav>
+        <button class="nav-toggle" aria-label="Menu">☰</button>
       </div>
     </header>
+
+    <!-- mobile side drawer -->
+    <nav class="nav-mobile" id="mobileNav">
+      <button class="close-nav" aria-label="Close menu">×</button>
+      <a href="events.html">Events</a>
+      <a href="join.html">Join Mailing List</a>
+      <a href="volunteer.html">Volunteer</a>
+      <a href="donate.html">Donate</a>
+      <a href="find.html">Find a Chapter</a>
+      <a href="start.html">Start a Chapter</a>
+      <a href="about.html">About Us</a>
+    </nav>
 
     <main class="wrap">
       <section class="description">
@@ -451,6 +549,25 @@
 
       // Load once on start
       load();
+      // Mobile nav toggle
+      const navToggle = document.querySelector('.nav-toggle');
+      const mobileNav = document.getElementById('mobileNav');
+      const closeNav = document.querySelector('.close-nav');
+
+      navToggle.addEventListener('click', () => {
+        mobileNav.classList.add('open');
+      });
+
+      closeNav.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+      });
+
+      // optional: close when clicking outside
+      document.addEventListener('click', (e) => {
+        if (mobileNav.classList.contains('open') && !mobileNav.contains(e.target) && !navToggle.contains(e.target)) {
+          mobileNav.classList.remove('open');
+        }
+      });
     </script>
   </body>
 </html>
