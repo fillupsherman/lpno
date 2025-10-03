@@ -117,18 +117,6 @@
       /* Prevent Android text auto-zoom making headings gigantic */
       html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
-      /* Nav layout: row on all sizes, icons + labels on desktop, icons only on mobile */
-      .nav-desktop a{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        text-decoration:none;
-        color:var(--text);
-        font-weight:600;
-        font-size:15px;
-      }
-      .nav-desktop .icon{ font-size:20px; line-height:1; }
-
       /* Mobile: hide labels, slightly larger icons for legibility */
       @media (max-width: 768px){
         .nav-desktop .label{ display:none !important; }
@@ -156,7 +144,7 @@
 
       /* responsive tweaks */
       @media (max-width:1160px){
-        .nav-desktop .label {font-size:10px; white-space: nowrap;}
+        .nav-desktop .label {font-size:10px; margin-bottom:0; white-space: nowrap; }
       }
       @media (max-width:740px){ .header-grid h1 {font-size: 16px;} }
       @media (max-width:640px){
