@@ -19,6 +19,22 @@ export default {
 
     const url = new URL(req.url);
 
+    if (req.method === 'POST' && url.pathname === '/subscribe') {
+      try {
+        const { email, hp = '' } = await req.json().catch(() => ({}));
+        if (hp) return json({ ok: true }); // honeypot -> silently ignore
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          return json({ ok:false, error:'Invalid email' }, 400);
+        }
+        const key = email.trim().toLowerCase();
+        await env.SUBSCRIBERS.put(key, JSON.stringify({ email:key, ts:Date.now() }));
+        // TODO (optional): call Mailchimp/ConvertKit/Resend webhook here
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok:false, error:'Server error' }, 500);
+      }
+    }
+    
     /* ---------- GET /events ---------- */
     if (req.method === 'GET' && url.pathname === '/events') {
       /* 1 – refresh access‑token if needed (same helper you already have) */

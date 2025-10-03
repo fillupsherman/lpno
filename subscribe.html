@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leftist-Progressive Night Out! — Mailing List</title>
+    <style>
+      :root{
+        --bg: #0b0f17;
+        --card: #121826;
+        --muted: #8fa3b0;
+        --text: #e6eef4;
+        --accent: rgb(59, 130, 246);
+        --accent-2: rgb(239, 68, 68);
+        --danger: #ef4444;
+        --ring: rgba(37, 0, 250, 0.35);
+        --shadow: 0 10px 25px rgba(0,0,0,.35);
+        --radius-lg: 20px;
+        --radius-sm: 12px;
+      }
+      @media (prefers-color-scheme: light){
+        :root{ --bg:#f7f9fc; --card:#ffffff; --text:#0f172a; --muted:#52606d; --shadow:0 10px 25px rgba(2,6,23,.07);}
+        body{background:linear-gradient(120deg,#eef2ff 0%, #fdf2f8 100%)}
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{
+        margin:0; font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246,.25), transparent 40%),
+        radial-gradient(1000px 500px at 110% 10%, rgba(239, 68, 68,.22), transparent 40%), var(--bg);
+      }
+
+      /* header + layout (same as events) */
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        display: flex;
+        flex-direction: column;
+      }
+      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+      .site-header { position: sticky; top: 0; z-index: 20; }
+      .header-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 16px;
+        row-gap: 8px;
+        align-items: center;
+      }
+      .header-grid .brand {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        align-items: center;
+      }
+      .header-grid .logo { height: 88px; width:auto; object-fit: contain; }
+      .header-grid h1 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        font-size: 24px;
+      }
+
+      /* nav */
+      .nav-desktop {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        padding: 8px 0;
+        justify-content: center;
+      }
+      .nav-desktop a{
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color .2s;
+      }
+      .nav-desktop a:hover{ color: var(--accent-2); }
+      .nav-desktop .label{ display:inline; }
+
+      /* shared components from events page */
+      .card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); }
+      .content{padding:20px 20px;}
+      .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
+      .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:12px 12px; border-radius:12px; outline:none}
+      .form input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .btn{background:var(--accent); color:white; padding:12px 14px; border:none; border-radius:12px; cursor:pointer; box-shadow: var(--shadow); transition:transform .06s ease}
+      .btn:active{transform:translateY(1px)}
+      .empty{color:var(--muted); text-align:center; padding:10px 0}
+
+      .description {
+        background: var(--card);
+        border: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 20px 24px;
+        margin: 0 0 24px;
+        text-align: center;
+      }
+      .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
+      .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
+
+      .toast{position:fixed; inset: auto 20px 20px auto; background: var(--card); color:var(--text); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); padding:12px 14px; border-radius: 12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); pointer-events:none; transition: all .2s ease}
+      .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
+      .error{color: var(--danger)}
+      footer{color:var(--muted); text-align:center; padding:30px 0 60px}
+
+      /* responsive tweaks */
+      @media (max-width:1160px){
+        .nav-desktop .label {font-size:10px; white-space: nowrap;}
+      }
+      @media (max-width:740px){ .header-grid h1 {font-size: 16px;} }
+      @media (max-width:640px){
+        .nav-desktop { gap:16px;}
+        .header-grid .logo { height: 72px; }
+        .header-grid .brand { display:none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-grid">
+        <span class="brand label">
+          <a href="events.html" aria-label="Home">
+            <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+          </a>
+        </span>
+        <h1 class="title">Leftist-Progressive Night Out!</h1>
+
+        <nav class="nav-desktop">
+          <a href="/index"><span class="label">Events</span></a>
+          <a href="/subscribe"><span class="label">Mailing List</span></a>
+          <a href="volunteer.html"><span class="label">Volunteer</span></a>
+          <a href="donate.html"><span class="label">Donate</span></a>
+          <a href="find.html"><span class="label">Chapters</span></a>
+          <a href="about.html"><span class="label">About</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="description">
+        <h2>Join the Mailing List</h2>
+        <p>Get low-volume updates about upcoming meetups and events. No spam—unsubscribe anytime.</p>
+      </section>
+
+      <!-- Subscription card -->
+      <section class="card" role="region" aria-labelledby="join-title" style="max-width:720px; margin:0 auto;">
+        <div class="content">
+          <h2 id="join-title" class="name" style="margin:0 0 10px;">Subscribe for updates</h2>
+
+          <form id="ml-form" class="form" novalidate>
+            <input type="email" name="email" placeholder="you@example.com" aria-label="Email" required autocomplete="email" />
+            <!-- honeypot to deter bots -->
+            <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" />
+            <button class="btn" type="submit">Subscribe</button>
+          </form>
+
+          <p id="ml-msg" class="empty" hidden></p>
+
+          <small style="color:var(--muted); display:block; margin-top:6px;">
+            By subscribing, you agree to occasional emails about events organized by Leftist-Progressive Night Out!.
+          </small>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer>
+      <small>© 2025 Leftist-Progressive Night Out!</small>
+    </footer>
+
+    <script>
+      const API = 'https://lpno.lpno-dev.workers.dev';
+
+      const f = document.getElementById('ml-form');
+      const m = document.getElementById('ml-msg');
+      const toast = document.getElementById('toast');
+
+      function showToast(text, ok=true){
+        toast.textContent = text;
+        toast.classList.toggle('error', !ok);
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), 2200);
+      }
+
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = f.email.value.trim();
+        if (!email) return;
+
+        // basic email validation before hitting the network
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          m.innerHTML = '<span class="error">Please enter a valid email.</span>';
+          m.hidden = false;
+          return;
+        }
+
+        const btn = f.querySelector('button');
+        btn.disabled = true;
+        m.hidden = true;
+
+        try {
+          const res = await fetch(`${API}/subscribe`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ email, hp: f.hp.value })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Failed');
+          f.reset();
+          m.textContent = 'Thanks! You’re on the list.';
+          m.hidden = false;
+          showToast('Subscribed 🎉', true);
+        } catch (err) {
+          m.innerHTML = `<span class="error">Could not subscribe.</span> <small>${(err.message||'')}</small>`;
+          m.hidden = false;
+          showToast('Subscription failed', false);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
