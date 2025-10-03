@@ -114,6 +114,45 @@
       .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
       .error{color: var(--danger)}
       footer{color:var(--muted); text-align:center; padding:30px 0 60px}
+      /* Prevent Android text auto-zoom making headings gigantic */
+      html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+      /* Nav layout: row on all sizes, icons + labels on desktop, icons only on mobile */
+      .nav-desktop a{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        text-decoration:none;
+        color:var(--text);
+        font-weight:600;
+        font-size:15px;
+      }
+      .nav-desktop .icon{ font-size:20px; line-height:1; }
+
+      /* Mobile: hide labels, slightly larger icons for legibility */
+      @media (max-width: 768px){
+        .nav-desktop .label{ display:none !important; }
+        .nav-desktop .icon{ font-size:22px; }
+      }
+
+    /* Tame big headings/paragraphs inside the subscribe page on small screens */
+      .description h2 { font-size: clamp(18px, 5vw, 26px); }
+      .description p  { font-size: clamp(14px, 3.8vw, 16px); }
+
+      /* Your card heading on this page */
+      .card h2,
+      #join-title {
+        font-size: clamp(18px, 5.2vw, 24px);
+        line-height: 1.2;
+        margin: 0 0 10px;
+      }
+
+      /* Make the email form stack cleanly on very small screens */
+      @media (max-width: 480px){
+        .form{ flex-wrap: wrap; }
+        .form input{ flex-basis: 100%; }
+        .form button{ width: 100%; }
+      }
 
       /* responsive tweaks */
       @media (max-width:1160px){
