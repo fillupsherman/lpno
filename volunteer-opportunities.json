@@ -10,5 +10,11 @@
     "title": "Social media manager",
     "description": "Create content and manager our club's social media.",
     "image_url": "images/social_media_manager.png"
+  },
+  {
+    "id": "outreach",
+    "title": "Outreach coordinator",
+    "description": "Coordinate outreach to reach new communities",
+    "image_url": "images/outreach.png"
   }
 ]
