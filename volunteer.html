@@ -30,9 +30,49 @@
         color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.25), transparent 40%),
         radial-gradient(1000px 500px at 110% 10%, rgba(239,68,68,.22), transparent 40%), var(--bg);
       }
-
       .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+            header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        display: flex;
+        flex-direction: column;   /* stack title + nav */
+      }
 
+      header .wrap.title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo {
+        width: 80px;   /* bigger logo */
+        height: auto;  /* keeps proportions */
+        align-self: stretch;  /* spans height of the flex row */
+        object-fit: contain;
+      }
+      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+      /* nav with icons */
+      .nav-desktop {
+        display:flex;
+        gap:22px;
+        justify-content: center;
+      }
+      .nav-desktop a {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        text-decoration:none;
+        color:var(--text);
+        font-weight:600;
+        font-size:15px;
+        transition:color 0.2s;
+      }
+      .nav-desktop a:hover { color:var(--accent-2);}
+      .nav-desktop .label { display:inline;}
       .site-header {
         position: sticky;
         top: 0;
@@ -41,69 +81,74 @@
         background: color-mix(in oklab, var(--bg), transparent 40%);
         border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
       }
+
       .header-grid {
         display: grid;
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
+        grid-template-columns: auto 1fr;  /* logo | content */
+        grid-template-rows: auto auto;    /* title row, nav row */
         column-gap: 16px;
         row-gap: 8px;
         align-items: center;
       }
+
+      /* Logo spans both rows (title + nav) */
       .header-grid .brand {
         grid-column: 1;
         grid-row: 1 / span 2;
         display: flex;
         align-items: center;
       }
+
       .header-grid .logo {
-        height: 88px;
+        height: 88px;         /* tweak to taste */
         width: auto;
         object-fit: contain;
       }
+
+      /* Title sits to the right, first row */
       .header-grid h1 {
         grid-column: 2;
         grid-row: 1;
         margin: 0;
         font-size: 24px;
       }
-
-      .nav-desktop {
+      .header-grid .nav-desktop {
         grid-column: 2;
         grid-row: 2;
         display: flex;
         gap: 18px;
         align-items: center;
-        padding: 8px 0;
-        justify-content: center;
+        padding: 8px 0px;
       }
-      .nav-desktop a{
+
+      .header-grid .nav-desktop a {
         text-decoration: none;
         color: var(--text);
         font-weight: 600;
         font-size: 15px;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
         transition: color .2s;
       }
-      .nav-desktop a:hover{ color: var(--accent-2); }
-      .nav-desktop .icon{ font-size:20px; line-height:1; }
-      .nav-desktop .label{ display:inline; }
+
+      .header-grid .nav-desktop a:hover {
+        color: var(--accent-2);
+      }
 
       @media (max-width:1160px){
-        .nav-desktop .label{font-size:10px; white-space:nowrap;}
+        .nav-desktop .label {font-size:10px; margin-bottom:0; white-space: nowrap; }
       }
+
       @media (max-width:740px){
-        .header-grid h1{font-size:16px;}
+        .header-grid h1 {font-size: 16px;}
       }
-      @media (max-width:768px){
-        .nav-desktop .label{display:none !important;}
-        .nav-desktop .icon{font-size:22px;}
-      }
+
       @media (max-width:640px){
-        .nav-desktop{gap:16px;}
-        .header-grid .logo{height:72px;}
-        .header-grid .brand{display:none;}
+        .nav-desktop { gap:16px;}
+        .header-grid .logo { height: 72px; }
+        .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
+        .header-grid .brand { display: none; }
       }
 
       .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:18px}
