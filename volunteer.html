@@ -228,138 +228,128 @@
     <footer>
       <small>© 2025 Leftist-Progressive Night Out!</small>
     </footer>
-
+    
     <script>
-      const API = 'https://lpno.lpno-dev.workers.dev';
+        const API = 'https://lpno.lpno-dev.workers.dev';
 
-      // Edit this list to change volunteer opportunities
-      const opportunities = [
-        {
-          id: 'welcome-table',
-          title: 'Welcome Table & Check-in',
-          description: 'Greet folks as they arrive, check them in, and help new people feel at home at events.',
-          image_url: 'images/vol_welcome.jpg'
-        },
-        {
-          id: 'outreach',
-          title: 'Outreach & Flyering',
-          description: 'Help distribute flyers and talk to community members at libraries, cafes, and public spaces.',
-          image_url: 'images/vol_outreach.jpg'
-        },
-        {
-          id: 'rides',
-          title: 'Rides & Accessibility Support',
-          description: 'Coordinate ride shares and help make sure events are accessible for members with mobility needs.',
-          image_url: 'images/vol_rides.jpg'
-        }
-      ];
+        const grid  = document.getElementById('vol-grid');
+        const msg   = document.getElementById('msg');
+        const toast = document.getElementById('toast');
 
-      const grid = document.getElementById('vol-grid');
-      const msg  = document.getElementById('msg');
-      const toast = document.getElementById('toast');
-
-      function showToast(text, ok = true){
-        toast.textContent = text;
-        toast.classList.toggle('error', !ok);
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2200);
-      }
-
-      function render() {
-        if (!opportunities.length) {
-          grid.innerHTML = '';
-          msg.hidden = false;
-          msg.textContent = 'No volunteer opportunities yet.';
-          return;
+        function showToast(text, ok = true){
+            toast.textContent = text;
+            toast.classList.toggle('error', !ok);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
         }
 
-        msg.hidden = true;
-        const frag = document.createDocumentFragment();
-
-        opportunities.forEach(op => {
-          const card = document.createElement('article');
-          card.className = 'card';
-
-          const media = document.createElement('div');
-          media.className = 'media';
-          if (op.image_url) {
-            const img = document.createElement('img');
-            img.src = op.image_url;
-            img.alt = op.title;
-            img.loading = 'lazy';
-            img.decoding = 'async';
-            media.appendChild(img);
-          }
-          card.appendChild(media);
-
-          const content = document.createElement('div');
-          content.className = 'content';
-          content.innerHTML = `
-            <h2 class="name">${op.title}</h2>
-            <p class="desc">${op.description}</p>
-          `;
-          card.appendChild(content);
-
-          const form = document.createElement('form');
-          form.className = 'form';
-          form.innerHTML = `
-            <input type="email" name="email" placeholder="you@example.com" aria-label="Email" required autocomplete="email" />
-            <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" />
-            <button class="btn" type="submit">I can help</button>
-          `;
-
-          const status = document.createElement('p');
-          status.className = 'empty';
-          status.hidden = true;
-
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = form.email.value.trim();
-            if (!email) return;
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-              status.innerHTML = '<span class="error">Please enter a valid email.</span>';
-              status.hidden = false;
-              return;
+        function render(opportunities) {
+            if (!Array.isArray(opportunities) || opportunities.length === 0) {
+            grid.innerHTML = '';
+            msg.hidden = false;
+            msg.textContent = 'No volunteer opportunities yet.';
+            return;
             }
 
-            const btn = form.querySelector('button');
-            btn.disabled = true;
+            msg.hidden = true;
+            const frag = document.createDocumentFragment();
+
+            opportunities.forEach(op => {
+            const card = document.createElement('article');
+            card.className = 'card';
+
+            const media = document.createElement('div');
+            media.className = 'media';
+            if (op.image_url) {
+                const img = document.createElement('img');
+                img.src = op.image_url;
+                img.alt = op.title || '';
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                media.appendChild(img);
+            }
+            card.appendChild(media);
+
+            const content = document.createElement('div');
+            content.className = 'content';
+            content.innerHTML = `
+                <h2 class="name">${op.title || ''}</h2>
+                <p class="desc">${op.description || ''}</p>
+            `;
+            card.appendChild(content);
+
+            const form = document.createElement('form');
+            form.className = 'form';
+            form.innerHTML = `
+                <input type="email" name="email" placeholder="you@example.com" aria-label="Email" required autocomplete="email" />
+                <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" />
+                <button class="btn" type="submit">I can help</button>
+            `;
+            const status = document.createElement('p');
+            status.className = 'empty';
             status.hidden = true;
 
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = form.email.value.trim();
+                if (!email) return;
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                status.innerHTML = '<span class="error">Please enter a valid email.</span>';
+                status.hidden = false;
+                return;
+                }
+
+                const btn = form.querySelector('button');
+                btn.disabled = true;
+                status.hidden = true;
+
+                try {
+                const res = await fetch(`${API}/volunteer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ opportunity_id: op.id, email, hp: form.hp.value })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || data.ok === false) throw new Error(data.error || `HTTP ${res.status}`);
+                form.reset();
+                status.textContent = 'Thanks! We’ll reach out soon about this role.';
+                status.hidden = false;
+                showToast('Volunteer interest saved!', true);
+                } catch (err) {
+                console.error(err);
+                status.innerHTML = `<span class="error">Could not save your sign-up.</span> <small>${(err.message||'')}</small>`;
+                status.hidden = false;
+                showToast('Could not save volunteer sign-up.', false);
+                } finally {
+                btn.disabled = false;
+                }
+            });
+
+            card.appendChild(form);
+            card.appendChild(status);
+            frag.appendChild(card);
+            });
+
+            grid.innerHTML = '';
+            grid.appendChild(frag);
+        }
+
+        async function loadOpportunities() {
             try {
-              const res = await fetch(`${API}/volunteer`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ opportunity_id: op.id, email, hp: form.hp.value })
-              });
-              const data = await res.json().catch(() => ({}));
-              if (!res.ok || data.ok === false) {
-                throw new Error(data.error || `HTTP ${res.status}`);
-              }
-              form.reset();
-              status.textContent = 'Thanks! We’ll reach out soon about this role.';
-              status.hidden = false;
-              showToast('Volunteer interest saved!', true);
+            msg.hidden = true;
+            msg.textContent = '';
+            grid.innerHTML = '';
+            const res = await fetch('volunteer-opportunities.json', { headers: { 'Accept': 'application/json' }});
+            const data = await res.json();
+            render(data);
             } catch (err) {
-              console.error(err);
-              status.innerHTML = `<span class="error">Could not save your sign-up.</span> <small>${(err.message || '')}</small>`;
-              status.hidden = false;
-              showToast('Could not save volunteer sign-up.', false);
-            } finally {
-              btn.disabled = false;
+            console.error(err);
+            msg.hidden = false;
+            msg.innerHTML = `<span class="error">Error loading volunteer opportunities.</span> <small>${(err.message||'')}</small>`;
             }
-          });
+        }
 
-          card.appendChild(form);
-          card.appendChild(status);
-          frag.appendChild(card);
-        });
-
-        grid.innerHTML = '';
-        grid.appendChild(frag);
-      }
-
-      render();
-    </script>
+        loadOpportunities();
+        </script>
   </body>
 </html>

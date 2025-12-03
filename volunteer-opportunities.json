@@ -1,0 +1,14 @@
+[
+  {
+    "id": "event-host",
+    "title": "Event host",
+    "description": "Help run events, welcome people, and keep things flowing.",
+    "image_url": "images/event_host.png"
+  },
+  {
+    "id": "outreach",
+    "title": "Outreach & flyering",
+    "description": "Table, flyer, and talk to community members about LPNO.",
+    "image_url": "images/vol_outreach.jpg"
+  }
+]
