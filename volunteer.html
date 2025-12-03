@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leftist-Progressive Night Out! — Volunteer</title>
+    <style>
+      :root{
+        --bg: #0b0f17;
+        --card: #121826;
+        --muted: #8fa3b0;
+        --text: #e6eef4;
+        --accent: rgb(59, 130, 246);
+        --accent-2: rgb(239, 68, 68);
+        --danger: #ef4444;
+        --ring: rgba(37, 0, 250, 0.35);
+        --shadow: 0 10px 25px rgba(0,0,0,.35);
+        --radius-lg: 20px;
+        --radius-sm: 12px;
+      }
+      @media (prefers-color-scheme: light){
+        :root{ --bg:#f7f9fc; --card:#ffffff; --text:#0f172a; --muted:#52606d; --shadow:0 10px 25px rgba(2,6,23,.07);}
+        body{background:linear-gradient(120deg,#eef2ff 0%, #fdf2f8 100%)}
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+      body{
+        margin:0; font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,.25), transparent 40%),
+        radial-gradient(1000px 500px at 110% 10%, rgba(239,68,68,.22), transparent 40%), var(--bg);
+      }
+
+      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+      }
+      .header-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        column-gap: 16px;
+        row-gap: 8px;
+        align-items: center;
+      }
+      .header-grid .brand {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        align-items: center;
+      }
+      .header-grid .logo {
+        height: 88px;
+        width: auto;
+        object-fit: contain;
+      }
+      .header-grid h1 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .nav-desktop {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        padding: 8px 0;
+        justify-content: center;
+      }
+      .nav-desktop a{
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: color .2s;
+      }
+      .nav-desktop a:hover{ color: var(--accent-2); }
+      .nav-desktop .icon{ font-size:20px; line-height:1; }
+      .nav-desktop .label{ display:inline; }
+
+      @media (max-width:1160px){
+        .nav-desktop .label{font-size:10px; white-space:nowrap;}
+      }
+      @media (max-width:740px){
+        .header-grid h1{font-size:16px;}
+      }
+      @media (max-width:768px){
+        .nav-desktop .label{display:none !important;}
+        .nav-desktop .icon{font-size:22px;}
+      }
+      @media (max-width:640px){
+        .nav-desktop{gap:16px;}
+        .header-grid .logo{height:72px;}
+        .header-grid .brand{display:none;}
+      }
+
+      .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:18px}
+      .card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column}
+      .media{position:relative; aspect-ratio: 16/9; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));}
+      .media img{width:100%; height:100%; object-fit:cover; display:block}
+      .content{padding:16px 16px 12px}
+      .name{font-size: clamp(18px, 2.2vw, 22px); margin:0 0 8px}
+      .desc{color:var(--muted); font-size:15px; line-height:1.5; margin:0 0 12px;}
+
+      .form{display:flex; gap:8px; padding:0 0 12px; align-items:center}
+      .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:10px 12px; border-radius:12px; outline:none}
+      .form input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .btn{background:var(--accent); color:white; padding:10px 14px; border:none; border-radius:12px; cursor:pointer; box-shadow: var(--shadow); transition:transform .06s ease}
+      .btn:active{transform:translateY(1px)}
+      @media (max-width:480px){
+        .form{flex-wrap:wrap;}
+        .form input{flex-basis:100%;}
+        .form button{width:100%;}
+      }
+
+      .description {
+        background: var(--card);
+        border: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 20px 24px;
+        margin: 12px 0 24px;
+        text-align: center;
+      }
+      .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
+      .description p  { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
+
+      .empty{color:var(--muted); text-align:center; padding:60px 0}
+      .toast{position:fixed; inset: auto 20px 20px auto; background: var(--card); color:var(--text); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); padding:12px 14px; border-radius: 12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); pointer-events:none; transition: all .2s ease}
+      .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
+      .error{color: var(--danger)}
+      footer{color:var(--muted); text-align:center; padding:30px 0 60px}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-grid">
+        <span class="brand label">
+          <a href="events.html" aria-label="Home">
+            <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+          </a>
+        </span>
+        <h1 class="title">Leftist-Progressive Night Out!</h1>
+
+        <nav class="nav-desktop">
+          <a href="events.html"><span class="icon" aria-hidden="true">📅</span><span class="label">Events</span></a>
+          <a href="/subscribe"><span class="icon" aria-hidden="true">✉️</span><span class="label">Mailing List</span></a>
+          <a href="volunteer.html"><span class="icon" aria-hidden="true">🤝</span><span class="label">Volunteer</span></a>
+          <a href="donate.html"><span class="icon" aria-hidden="true">💖</span><span class="label">Donate</span></a>
+          <a href="find.html"><span class="icon" aria-hidden="true">📍</span><span class="label">Chapters</span></a>
+          <a href="about.html"><span class="icon" aria-hidden="true">ℹ️</span><span class="label">About</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="description">
+        <h2>Volunteer with Leftist-Progressive Night Out!</h2>
+        <p>
+          Help keep our events running, welcome new members, and build power in the community.
+          Drop your email on any opportunity that interests you and we’ll follow up with details.
+        </p>
+      </section>
+
+      <div id="vol-grid" class="grid" aria-live="polite"></div>
+      <p id="msg" class="empty" hidden></p>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer>
+      <small>© 2025 Leftist-Progressive Night Out!</small>
+    </footer>
+
+    <script>
+      const API = 'https://lpno.lpno-dev.workers.dev';
+
+      // Edit this list to change volunteer opportunities
+      const opportunities = [
+        {
+          id: 'welcome-table',
+          title: 'Welcome Table & Check-in',
+          description: 'Greet folks as they arrive, check them in, and help new people feel at home at events.',
+          image_url: 'images/vol_welcome.jpg'
+        },
+        {
+          id: 'outreach',
+          title: 'Outreach & Flyering',
+          description: 'Help distribute flyers and talk to community members at libraries, cafes, and public spaces.',
+          image_url: 'images/vol_outreach.jpg'
+        },
+        {
+          id: 'rides',
+          title: 'Rides & Accessibility Support',
+          description: 'Coordinate ride shares and help make sure events are accessible for members with mobility needs.',
+          image_url: 'images/vol_rides.jpg'
+        }
+      ];
+
+      const grid = document.getElementById('vol-grid');
+      const msg  = document.getElementById('msg');
+      const toast = document.getElementById('toast');
+
+      function showToast(text, ok = true){
+        toast.textContent = text;
+        toast.classList.toggle('error', !ok);
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      function render() {
+        if (!opportunities.length) {
+          grid.innerHTML = '';
+          msg.hidden = false;
+          msg.textContent = 'No volunteer opportunities yet.';
+          return;
+        }
+
+        msg.hidden = true;
+        const frag = document.createDocumentFragment();
+
+        opportunities.forEach(op => {
+          const card = document.createElement('article');
+          card.className = 'card';
+
+          const media = document.createElement('div');
+          media.className = 'media';
+          if (op.image_url) {
+            const img = document.createElement('img');
+            img.src = op.image_url;
+            img.alt = op.title;
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            media.appendChild(img);
+          }
+          card.appendChild(media);
+
+          const content = document.createElement('div');
+          content.className = 'content';
+          content.innerHTML = `
+            <h2 class="name">${op.title}</h2>
+            <p class="desc">${op.description}</p>
+          `;
+          card.appendChild(content);
+
+          const form = document.createElement('form');
+          form.className = 'form';
+          form.innerHTML = `
+            <input type="email" name="email" placeholder="you@example.com" aria-label="Email" required autocomplete="email" />
+            <input type="text" name="hp" tabindex="-1" autocomplete="off" style="position:absolute; left:-9999px;" />
+            <button class="btn" type="submit">I can help</button>
+          `;
+
+          const status = document.createElement('p');
+          status.className = 'empty';
+          status.hidden = true;
+
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = form.email.value.trim();
+            if (!email) return;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+              status.innerHTML = '<span class="error">Please enter a valid email.</span>';
+              status.hidden = false;
+              return;
+            }
+
+            const btn = form.querySelector('button');
+            btn.disabled = true;
+            status.hidden = true;
+
+            try {
+              const res = await fetch(`${API}/volunteer`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ opportunity_id: op.id, email, hp: form.hp.value })
+              });
+              const data = await res.json().catch(() => ({}));
+              if (!res.ok || data.ok === false) {
+                throw new Error(data.error || `HTTP ${res.status}`);
+              }
+              form.reset();
+              status.textContent = 'Thanks! We’ll reach out soon about this role.';
+              status.hidden = false;
+              showToast('Volunteer interest saved!', true);
+            } catch (err) {
+              console.error(err);
+              status.innerHTML = `<span class="error">Could not save your sign-up.</span> <small>${(err.message || '')}</small>`;
+              status.hidden = false;
+              showToast('Could not save volunteer sign-up.', false);
+            } finally {
+              btn.disabled = false;
+            }
+          });
+
+          card.appendChild(form);
+          card.appendChild(status);
+          frag.appendChild(card);
+        });
+
+        grid.innerHTML = '';
+        grid.appendChild(frag);
+      }
+
+      render();
+    </script>
+  </body>
+</html>
