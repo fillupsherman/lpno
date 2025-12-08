@@ -206,33 +206,37 @@
             <p>
               Make a one-time contribution to help sustain our organizing and social events.
             </p>
-            <form
-              class="form-vertical"
-              action="https://www.paypal.com/donate"
-              method="post"
-              target="_blank"
-            >
-              <!-- TODO: replace with your PayPal business / hosted button info -->
-              <input type="hidden" name="business" value="fillupsherman@gmail.com" />
-              <input type="hidden" name="item_name" value="Donation to Leftist-Progressive Night Out!" />
-              <input type="hidden" name="currency_code" value="USD" />
 
+            <form class="form-vertical" onsubmit="event.preventDefault(); goPayPal();">
               <label>
                 Donation amount (USD)
                 <input
+                  id="donationAmount"
                   type="number"
-                  name="amount"
                   min="1"
-                  step="0.01"
+                  step="1.00"
                   required
                   inputmode="decimal"
+                  placeholder="10.00"
                 />
               </label>
+
               <span class="helper-text">
-                You’ll be taken to PayPal to complete your secure donation.
+                You’ll be taken to PayPal to complete your secure payment.
               </span>
+
               <button type="submit" class="btn">Donate with PayPal</button>
             </form>
+
+            <script>
+              function goPayPal() {
+                const amt = document.getElementById('donationAmount').value.trim();
+                if (!amt || isNaN(amt) || Number(amt) <= 0) return;
+
+                const url = `https://paypal.me/lpno/${encodeURIComponent(amt)}`;
+                window.open(url, '_blank', 'noopener');
+              }
+            </script>
           </div>
         </article>
 
