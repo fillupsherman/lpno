@@ -132,6 +132,28 @@
         margin: 0;
         font-size: 24px;
       }
+      .header-grid .nav-desktop {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        padding: 8px 0px;
+      }
+            .header-grid .nav-desktop a {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color .2s;
+      }
+
+      .header-grid .nav-desktop a:hover {
+        color: var(--accent-2);
+      }
       .nav-desktop {
         grid-column: 2;
         grid-row: 2;
