@@ -280,11 +280,7 @@
             <p>
               Want to contribute equipment, materials, food, or other items for events? Share what you’d like to donate and we’ll follow up.
             </p>
-            <form
-              class="form-vertical"
-              action="/donate-supplies"
-              method="post"
-            >
+            <form id="supply-form" class="form-vertical" novalidate>
               <!-- Adjust action to your backend route or form handler -->
               <label>
                 Your email
@@ -365,7 +361,7 @@
           m.hidden = false;
           showToast('Supply offer sent', true);
         } catch (err) {
-          m.innerHTML = `<span class="error">Could not submit.</span>`;
+          m.innerHTML = '<span class="error">Could not submit.</span>';
           m.hidden = false;
           showToast('Submission failed', false);
         } finally {
