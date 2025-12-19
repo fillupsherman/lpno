@@ -355,8 +355,18 @@
             headers: { 'Content-Type':'application/json' },
             body: JSON.stringify({ email, description })
           });
+
+          // handle non-2xx status
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+
           const data = await res.json();
-          if (!data.ok) throw new Error(data.error || 'Failed');
+
+          // in case Worker doesn't return { ok: true }
+          if (!data || data.ok !== true) {
+            throw new Error(data?.error || 'Submission failed');
+          }
 
           f.reset();
           m.textContent = 'Thanks! We’ll follow up soon.';
@@ -365,7 +375,7 @@
         } catch (err) {
           m.innerHTML = '<span class="error">Could not submit.</span>';
           m.hidden = false;
-          showToast('Submission failed', false);
+          showToast(err.message || 'Submission failed', false);
         } finally {
           btn.disabled = false;
         }
