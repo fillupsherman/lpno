@@ -320,5 +320,58 @@
     <footer>
       <small>© 2025 Leftist-Progressive Night Out!</small>
     </footer>
+    <script>
+      const API = 'https://lpno.lpno-dev.workers.dev';
+
+      const f = document.getElementById('supply-form');
+      const m = document.getElementById('supply-msg');
+      const toast = document.getElementById('toast');
+
+      function showToast(text, ok=true){
+        toast.textContent = text;
+        toast.classList.toggle('error', !ok);
+        toast.classList.add('show');
+        setTimeout(()=> toast.classList.remove('show'), 2200);
+      }
+
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = f.email.value.trim();
+        const description = f.description.value.trim();
+        if (!email || !description) return;
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          m.innerHTML = '<span class="error">Please enter a valid email.</span>';
+          m.hidden = false;
+          return;
+        }
+
+        const btn = f.querySelector('button');
+        btn.disabled = true;
+        m.hidden = true;
+
+        try {
+          const res = await fetch(`${API}/donate-supplies`, {
+            method: 'POST',
+            headers: { 'Content-Type':'application/json' },
+            body: JSON.stringify({ email, description })
+          });
+          const data = await res.json();
+          if (!data.ok) throw new Error(data.error || 'Failed');
+
+          f.reset();
+          m.textContent = 'Thanks! We’ll follow up soon.';
+          m.hidden = false;
+          showToast('Supply offer sent', true);
+        } catch (err) {
+          m.innerHTML = `<span class="error">Could not submit.</span>`;
+          m.hidden = false;
+          showToast('Submission failed', false);
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    </script>
   </body>
 </html>
