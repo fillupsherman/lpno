@@ -121,7 +121,7 @@
       }
       .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
       .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
-      .description a { color:var(--accent); text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;}
+      .description a { text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;}
       .description a:hover { color: var(--accent-2);}
       .gradient-text {
         background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
@@ -259,7 +259,6 @@
     <main class="wrap">
         <section class="description">
             <h2>Existing Chapters</h2>
-            <p>Find an active chapter or apply to start one in your area.</p>
             <div id="chapters" class="chapters"></div>
         </section>
 
