@@ -261,11 +261,39 @@
             <h2 class="name">Start a New Chapter</h2>
             <p class="desc">Tell us where you are and how to contact you.</p>
             </div>
-            <form class="form" id="chapterForm">
-            <input name="email" type="email" placeholder="Your email" required />
-            <input name="location" placeholder="City / Region" required />
-            <button class="btn">Apply</button>
+            <form
+                class="form"
+                action="https://formspree.io/f/mkogdpnr"
+                method="POST"
+                style="flex-direction:column; gap:10px;"
+            >
+                <input type="email" name="email" placeholder="Email" required />
+
+                <input name="first_name" placeholder="First name" required />
+                <input name="middle_name" placeholder="Middle name" required />
+                <input name="last_name" placeholder="Last name" required />
+
+                <input name="twitter" placeholder="Twitter / X (optional)" />
+                <input name="instagram" placeholder="Instagram (optional)" />
+                <input name="bluesky" placeholder="Bluesky (optional)" />
+                <input name="facebook" placeholder="Facebook (optional)" />
+                <input name="links" placeholder="Other socials or links (optional)" />
+
+                <textarea
+                    name="message"
+                    placeholder="Anything you'd like to tell us"
+                    rows="4"
+                    style="resize:vertical"
+                ></textarea>
+
+                <!-- spam honeypot -->
+                <input type="text" name="_gotcha" style="display:none">
+
+                <input type="hidden" name="_subject" value="New Chapter Application">
+
+                <button class="btn">Apply</button>
             </form>
+
         </article>
     </main>
 
