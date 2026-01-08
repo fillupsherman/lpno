@@ -57,6 +57,10 @@
       h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
       main.wrap{padding-top: 28px}
 
+      .email-form {
+        width: 100%;
+      }
+
       .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin: 8px 0 18px}
       .search{flex:1; position:relative}
       .search input{width:100%; background:var(--card); color:var(--text); border:1px solid transparent; padding:12px 14px 12px 40px; border-radius: 12px; outline:none; box-shadow: var(--shadow)}
@@ -267,19 +271,20 @@
                 method="POST"
                 style="flex-direction:column; gap:10px;"
             >
-                <input type="email" name="email" placeholder="Email" required />
+                <input class="email-form" type="email" name="email" placeholder="Email" required />
 
-                <input name="first_name" placeholder="First name" required />
-                <input name="middle_name" placeholder="Middle name" required />
-                <input name="last_name" placeholder="Last name" required />
+                <input class="email-form" name="first_name" placeholder="First name" required />
+                <input class="email-form" name="middle_name" placeholder="Middle name" required />
+                <input class="email-form" name="last_name" placeholder="Last name" required />
 
-                <input name="twitter" placeholder="Twitter / X (optional)" />
-                <input name="instagram" placeholder="Instagram (optional)" />
-                <input name="bluesky" placeholder="Bluesky (optional)" />
-                <input name="facebook" placeholder="Facebook (optional)" />
-                <input name="links" placeholder="Other socials or links (optional)" />
+                <input class="email-form" name="twitter" placeholder="Twitter / X (optional)" />
+                <input class="email-form" name="instagram" placeholder="Instagram (optional)" />
+                <input class="email-form" name="bluesky" placeholder="Bluesky (optional)" />
+                <input class="email-form" name="facebook" placeholder="Facebook (optional)" />
+                <input class="email-form" name="links" placeholder="Other socials or links (optional)" />
 
                 <textarea
+                    class="email-form" 
                     name="message"
                     placeholder="Anything you'd like to tell us"
                     rows="4"
@@ -291,7 +296,7 @@
 
                 <input type="hidden" name="_subject" value="New Chapter Application">
 
-                <button class="btn">Apply</button>
+                <button class="btn email-form">Apply</button>
             </form>
 
         </article>
