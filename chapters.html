@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Leftist-Progressive Night Out!</title>
+    <style>
+      :root{
+        --bg: #0b0f17;
+        --card: #121826;
+        --muted: #8fa3b0;
+        --text: #e6eef4;
+        --accent: rgb(59, 130, 246);
+        --accent-2: rgb(239, 68, 68);
+        --danger: #ef4444;
+        --ring: rgba(37, 0, 250, 0.35);
+        --shadow: 0 10px 25px rgba(0,0,0,.35);
+        --radius-lg: 20px;
+        --radius-sm: 12px;
+      }
+      @media (prefers-color-scheme: light){
+        :root{ --bg:#f7f9fc; --card:#ffffff; --text:#0f172a; --muted:#52606d; --shadow:0 10px 25px rgba(2,6,23,.07);}
+        body{background:linear-gradient(120deg,#eef2ff 0%, #fdf2f8 100%)}
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      body{
+        margin:0; font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246,.25), transparent 40%),
+        radial-gradient(1000px 500px at 110% 10%, rgba(239, 68, 68,.22), transparent 40%), var(--bg);
+      }
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        display: flex;
+        flex-direction: column;   /* stack title + nav */
+      }
+
+      header .wrap.title {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .logo {
+        width: 80px;   /* bigger logo */
+        height: auto;  /* keeps proportions */
+        align-self: stretch;  /* spans height of the flex row */
+        object-fit: contain;
+      }
+      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
+      .title{display:flex; gap:14px; align-items:center}
+      h1{font-size: clamp(22px, 3.5vw, 34px); margin:0; letter-spacing:.2px}
+      main.wrap{padding-top: 28px}
+
+      .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin: 8px 0 18px}
+      .search{flex:1; position:relative}
+      .search input{width:100%; background:var(--card); color:var(--text); border:1px solid transparent; padding:12px 14px 12px 40px; border-radius: 12px; outline:none; box-shadow: var(--shadow)}
+      .search input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .search svg{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.6}
+      .btn{background:var(--accent); color:white; padding:12px 14px; border:none; border-radius:12px; cursor:pointer; box-shadow: var(--shadow); transition:transform .06s ease}
+      .btn:active{transform:translateY(1px)}
+
+      .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:18px}
+      .card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column}
+      .media{position:relative; aspect-ratio: 16/9; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));}
+      .media img{width:100%; height:100%; object-fit:cover; display:block}
+      .datechip{position:absolute; left:12px; bottom:12px; background: color-mix(in oklab, var(--bg), white 10%); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); color:var(--text); padding:6px 10px; border-radius:999px; font-size:12.5px; backdrop-filter: blur(6px)}
+      .content{padding:14px 14px 6px}
+      .eyebrow{font-size:12px; color:var(--muted); letter-spacing:.25px}
+      .name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px}
+      .desc {
+        color: var(--muted);
+        margin: 0 0 10px;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: max-height 0.25s ease;
+      }
+      .desc.expanded { -webkit-line-clamp: unset; overflow: visible; }
+      .toggle-desc { background:none; border:none; color:var(--accent); font-size:13px; cursor:pointer; padding:0; margin-top:-6px; margin-bottom:10px; text-align:left;}
+      .toggle-desc:hover { color:var(--accent-2);}
+      .stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
+      .stats strong{color:var(--text)}
+
+      .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
+      .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:10px 12px; border-radius:12px; outline:none}
+      .form input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
+      .form button{background: var(--accent-2)}
+
+      .skeleton{animation: pulse 1.4s ease-in-out infinite; background: color-mix(in oklab, var(--card), white 4%); border-radius:12px; height:260px}
+      @keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
+
+      .empty{color:var(--muted); text-align:center; padding:60px 0}
+      .toast{position:fixed; inset: auto 20px 20px auto; background: var(--card); color:var(--text); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); padding:12px 14px; border-radius: 12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); pointer-events:none; transition: all .2s ease}
+      .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
+      .error{color: var(--danger)}
+      footer{color:var(--muted); text-align:center; padding:30px 0 60px}
+      a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted), transparent 45%)}
+      .description {
+        background: var(--card);
+        border: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+        padding: 20px 24px;
+        margin: 0 0 24px;
+        text-align: center;
+      }
+      .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
+      .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
+      .description a { color:var(--accent); text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;}
+      .description a:hover { color: var(--accent-2);}
+      .gradient-text {
+        background: linear-gradient(90deg, #ef4444, #ffffff, #3b82f6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+      }
+      .names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), white 3%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);}
+      .names strong { flex-basis:100%; margin-bottom:4px; font-size:13px; color:var(--muted);}
+      .name-badge { color:#fff; padding:4px 10px; border-radius:999px; font-size:13px; font-weight:500; white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.15); transition: transform 0.15s ease;}
+      .name-badge:hover { transform:scale(1.08);}
+      .location { font-size:13px; color:var(--muted); margin:2px 0 1px;}
+      .gradient-underline { position:relative; color:var(--muted); text-decoration:none;}
+      .gradient-underline::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:linear-gradient(90deg,#ef4444, #ffffff, #3b82f6); border-radius:1px;}
+
+      /* nav with icons */
+      .nav-desktop {
+        display:flex;
+        gap:22px;
+        justify-content: center;
+      }
+      .nav-desktop a {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        text-decoration:none;
+        color:var(--text);
+        font-weight:600;
+        font-size:15px;
+        transition:color 0.2s;
+      }
+      .nav-desktop a:hover { color:var(--accent-2);}
+      .nav-desktop .label { display:inline;}
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        backdrop-filter: blur(10px);
+        background: color-mix(in oklab, var(--bg), transparent 40%);
+        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+      }
+
+      .header-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;  /* logo | content */
+        grid-template-rows: auto auto;    /* title row, nav row */
+        column-gap: 16px;
+        row-gap: 8px;
+        align-items: center;
+      }
+
+      /* Logo spans both rows (title + nav) */
+      .header-grid .brand {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        display: flex;
+        align-items: center;
+      }
+
+      .header-grid .logo {
+        height: 88px;         /* tweak to taste */
+        width: auto;
+        object-fit: contain;
+      }
+
+      /* Title sits to the right, first row */
+      .header-grid h1 {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        font-size: 24px;
+      }
+      .header-grid .nav-desktop {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        padding: 8px 0px;
+      }
+
+      .header-grid .nav-desktop a {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 15px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: color .2s;
+      }
+
+      .header-grid .nav-desktop a:hover {
+        color: var(--accent-2);
+      }
+
+      @media (max-width:1160px){
+        .nav-desktop .label {font-size:10px; margin-bottom:0; white-space: nowrap; }
+      }
+
+      @media (max-width:740px){
+        .header-grid h1 {font-size: 16px;}
+      }
+
+      @media (max-width:640px){
+        .nav-desktop { gap:16px;}
+        .header-grid .logo { height: 72px; }
+        .header-grid .nav-desktop { gap: 14px; padding: 6px 10px; }
+        .header-grid .brand { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-grid">
+        <span class="brand label">
+          <a href="events.html" aria-label="Home">
+            <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+          </a>
+        </span>
+        <h1 class="title">Leftist-Progressive Night Out!</h1>
+
+        <nav class="nav-desktop">
+          <a href="/index"><span class="label">Events</span></a>
+          <a href="/subscribe"><span class="label">Mailing List</span></a>
+          <a href="volunteer.html"><span class="label">Volunteer</span></a>
+          <a href="donate.html"><span class="label">Donate</span></a>
+          <a href="find.html"><span class="label">Chapters</span></a>
+          <a href="about.html"><span class="label">About</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+        <section class="description">
+            <h2>Local Chapters</h2>
+            <p>Find an active chapter or apply to start one in your area.</p>
+        </section>
+
+        <div id="chapters" class="grid"></div>
+
+        <article class="card" style="max-width:520px;margin:32px auto;">
+            <div class="content">
+            <h2 class="name">Start a New Chapter</h2>
+            <p class="desc">Tell us where you are and how to contact you.</p>
+            </div>
+            <form class="form" id="chapterForm">
+            <input name="email" type="email" placeholder="Your email" required />
+            <input name="location" placeholder="City / Region" required />
+            <button class="btn">Apply</button>
+            </form>
+        </article>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <footer>
+      <small>© 2025 Leftist-Progressive Night Out!</small>
+    </footer>
+
+        <script>
+            async function loadChapters() {
+            const res = await fetch('/data/chapters.json');
+            const chapters = await res.json();
+            const el = document.getElementById('chapters');
+
+            el.innerHTML = chapters.map(c => `
+                <article class="card">
+                <div class="content">
+                    <h2 class="name">${c.name}</h2>
+                    <a class="inline" href="${c.events_url}">View events →</a>
+                </div>
+                </article>
+            `).join('');
+            }
+
+            document.getElementById('chapterForm').addEventListener('submit', async e => {
+            e.preventDefault();
+            const f = e.target;
+
+            const res = await fetch('https://lpno.lpno-dev.workers.dev/chapter-apply', {
+                method: 'POST',
+                headers: { 'Content-Type':'application/json' },
+                body: JSON.stringify({
+                email: f.email.value,
+                location: f.location.value
+                })
+            });
+
+            if (res.ok) {
+                showToast('Application sent!');
+                f.reset();
+            } else {
+                showToast('Submission failed', false);
+            }
+            });
+
+            loadChapters();
+        </script>
+    </body>
+</html>
