@@ -305,41 +305,19 @@
 
         <script>
             async function loadChapters() {
-            const res = await fetch('/data/chapters.json');
-            const chapters = await res.json();
-            const el = document.getElementById('chapters');
+                const res = await fetch('/data/chapters.json');
+                const chapters = await res.json();
+                const el = document.getElementById('chapters');
 
-            el.innerHTML = chapters.map(c => `
-                <article class="card">
-                <div class="content">
-                    <h2 class="name">${c.name}</h2>
-                    <a class="inline" href="${c.events_url}">View events →</a>
-                </div>
-                </article>
-            `).join('');
+                el.innerHTML = chapters.map(c => `
+                    <article class="card">
+                        <div class="content">
+                            <h2 class="name">${c.name}</h2>
+                            <a class="inline" href="${c.events_url}">View events →</a>
+                        </div>
+                    </article>
+                `).join('');
             }
-
-            document.getElementById('chapterForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const f = e.target;
-
-            const res = await fetch('https://lpno.lpno-dev.workers.dev/chapter-apply', {
-                method: 'POST',
-                headers: { 'Content-Type':'application/json' },
-                body: JSON.stringify({
-                email: f.email.value,
-                location: f.location.value
-                })
-            });
-
-            if (res.ok) {
-                showToast('Application sent!');
-                f.reset();
-            } else {
-                showToast('Submission failed', false);
-            }
-            });
-
             loadChapters();
         </script>
     </body>
