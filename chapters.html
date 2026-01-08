@@ -61,6 +61,10 @@
         width: 100%;
       }
 
+      .chapters {
+        text-align: start;
+      }
+
       .toolbar{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin: 8px 0 18px}
       .search{flex:1; position:relative}
       .search input{width:100%; background:var(--card); color:var(--text); border:1px solid transparent; padding:12px 14px 12px 40px; border-radius: 12px; outline:none; box-shadow: var(--shadow)}
@@ -256,7 +260,7 @@
         <section class="description">
             <h2>Existing Chapters</h2>
             <p>Find an active chapter or apply to start one in your area.</p>
-            <div id="chapters"></div>
+            <div id="chapters" class="chapters"></div>
         </section>
 
         <article class="card" style="max-width:520px;margin:32px auto;">
