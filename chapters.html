@@ -314,12 +314,8 @@
                 const el = document.getElementById('chapters');
 
                 el.innerHTML = chapters.map(c => `
-                    <article class="card">
-                        <div class="content">
-                            <h2 class="name">${c.name}</h2>
-                            <a class="inline" href="${c.events_url}">View events →</a>
-                        </div>
-                    </article>
+                    <h2 class="name">${c.name}</h2>
+                    <a class="inline" href="${c.events_url}">View events →</a>
                 `).join('');
             }
             loadChapters();
