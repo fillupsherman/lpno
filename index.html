@@ -389,12 +389,12 @@
           `;
           card.appendChild(content);
           const form = document.createElement('form');
-          form.className = 'form';
           if (ev.total_rsvps >= 20) {
             form.innerHTML = `
             <span><strong> RSVPs are full for this event.</strong></span>
           `;
           } else {
+            form.className = 'form';
             form.innerHTML = `
             <input name="name" placeholder="Your name" aria-label="Your name" required />
             <button class="btn">RSVP</button>
@@ -402,10 +402,6 @@
           }
           
 
-          form.innerHTML = `
-            <input name="name" placeholder="Your name" aria-label="Your name" required />
-            <button class="btn">RSVP</button>
-          `;
           form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = form.name.value.trim();
