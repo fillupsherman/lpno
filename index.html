@@ -390,8 +390,9 @@
           card.appendChild(content);
           const form = document.createElement('form');
           if (ev.total_rsvps >= 20) {
+            form.className = 'form';
             form.innerHTML = `
-            <span><strong> RSVPs are full for this event.</strong></span>
+            <span><strong>This event is full.</strong></span>
           `;
           } else {
             form.className = 'form';
