@@ -1,0 +1,61 @@
+/* css/plasma.css - dynamic electric plasma background (red, white, blue) */
+:root{
+  --plasma-red: rgba(239,68,68,0.95);
+  --plasma-white: rgba(255,255,255,0.92);
+  --plasma-blue: rgba(59,130,246,0.95);
+}
+html,body{height:100%;}
+body{background:#000 !important;}
+
+/* two soft, large moving colour blobs blended together create a plasma-like effect */
+body::before, body::after{
+  content: "";
+  position: fixed;
+  inset: -15% -15% -15% -15%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(96px) saturate(140%) contrast(110%);
+  mix-blend-mode: screen;
+  opacity: 0.95;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+body::before{
+  background-image:
+    radial-gradient(closest-side at 18% 28%, var(--plasma-red) 0%, rgba(239,68,68,0.36) 18%, transparent 42%),
+    radial-gradient(closest-side at 72% 68%, var(--plasma-blue) 0%, rgba(59,130,246,0.30) 24%, transparent 56%);
+  animation: plasma-move-1 18s linear infinite;
+}
+
+body::after{
+  background-image:
+    radial-gradient(closest-side at 50% 44%, var(--plasma-white) 0%, rgba(255,255,255,0.18) 8%, transparent 30%),
+    radial-gradient(closest-side at 10% 80%, rgba(239,68,68,0.30) 0%, rgba(59,130,246,0.30) 36%, transparent 70%);
+  animation: plasma-move-2 12s linear infinite reverse;
+  opacity: 0.92;
+}
+
+@keyframes plasma-move-1{
+  0%{ transform: translate3d(-12%, -8%, 0) scale(1); }
+  25%{ transform: translate3d(6%, 12%, 0) scale(1.02); }
+  50%{ transform: translate3d(10%, -6%, 0) scale(1.06); }
+  75%{ transform: translate3d(-6%, 6%, 0) scale(1.03); }
+ 100%{ transform: translate3d(-12%, -8%, 0) scale(1); }
+}
+
+@keyframes plasma-move-2{
+  0%{ transform: translate3d(8%, 10%, 0) scale(1); }
+  25%{ transform: translate3d(-4%, -12%, 0) scale(1.03); }
+  50%{ transform: translate3d(-10%, 6%, 0) scale(1.05); }
+  75%{ transform: translate3d(6%, -6%, 0) scale(1.02); }
+ 100%{ transform: translate3d(8%, 10%, 0) scale(1); }
+}
+
+/* tone down for reduced-motion preference */
+@media (prefers-reduced-motion: reduce){
+  body::before, body::after{ animation: none; }
+}
+
+/* make sure core layout sits above the background layers */
+:where(header, main, footer){ position: relative; z-index: 1; }
