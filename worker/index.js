@@ -1,23 +1,3 @@
-/*
- * ============================================================
- * Facebook Developer Setup (one-time, before deploying)
- * ============================================================
- * 1. Go to https://developers.facebook.com → Create App → Business type
- * 2. Add the "Pages API" product
- * 3. In Graph API Explorer:
- *    - Select your App and your Facebook Page
- *    - Request permissions: pages_manage_events, pages_read_engagement
- *    - Generate a User Token, exchange it for a Long-Lived Page Access Token
- *    - For a non-expiring token, create a System User in Business Manager
- * 4. Find your Page ID:
- *    GET https://graph.facebook.com/v19.0/me/accounts?access_token=<TOKEN>
- * 5. Store secrets in Cloudflare:
- *    wrangler secret put FB_PAGE_ACCESS_TOKEN
- *    wrangler secret put ADMIN_KEY   (any random string, used to protect GET /sync)
- * 6. Set FB_PAGE_ID in wrangler.toml [vars]
- * ============================================================
- */
-
 export default {
   async fetch(req, env) {
     /* ---------- helper ---------- */
@@ -142,12 +122,9 @@ export default {
         };
       });
 
-      // filter out past events so the site only shows upcoming events
-      const upcoming = eventsArray.filter(ev => ev.time && ev.time > Date.now());
-
       // merge local RSVPs
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
-      const combined = upcoming.map(ev => {
+      const combined = eventsArray.map(ev => {
         const localNames = local[ev.id] || [];
         return {
           ...ev,
@@ -174,170 +151,8 @@ export default {
       return json({ ok:true });
     }
 
-    /* ---------- GET /sync (manual trigger, protected) ---------- */
-    if (req.method === 'GET' && url.pathname === '/sync') {
-      if (!env.ADMIN_KEY || req.headers.get('X-Admin-Key') !== env.ADMIN_KEY) {
-        return json({ error: 'Unauthorized' }, 401);
-      }
-      const result = await syncToFacebook(env);
-      return json(result);
-    }
-
     return json({ error:'Not found' }, 404);
-  },
-
-  async scheduled(event, env, ctx) {
-    ctx.waitUntil(syncToFacebook(env));
   }
-}
-
-/* ---- Meetup → Facebook sync ---- */
-
-/**
- * Normalise a name + ISO date string into a stable match key.
- * Strips extra whitespace/case from name; rounds time to the minute.
- */
-function matchKey(name, isoDateTime) {
-  const normName = name.trim().toLowerCase().replace(/\s+/g, ' ');
-  const dt = new Date(isoDateTime);
-  // zero out seconds/ms so minor differences don't break matching
-  dt.setSeconds(0, 0);
-  return `${normName}|${dt.toISOString()}`;
-}
-
-/**
- * Strip basic HTML tags from Meetup descriptions before sending to Facebook.
- */
-function stripHtml(html = '') {
-  return html.replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').trim();
-}
-
-/**
- * Fetch all upcoming events from the Facebook Page.
- * Returns a Map of matchKey → { id, name, start_time }.
- */
-async function getFacebookEvents(env) {
-  const fields = 'id,name,start_time,description,place';
-  const url = `https://graph.facebook.com/v19.0/${env.FB_PAGE_ID}/events?fields=${fields}&time_filter=upcoming&limit=100&access_token=${env.FB_PAGE_ACCESS_TOKEN}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`FB events fetch failed: ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(`FB API error: ${data.error.message}`);
-
-  const map = new Map();
-  for (const ev of (data.data || [])) {
-    map.set(matchKey(ev.name, ev.start_time), ev);
-  }
-  return map;
-}
-
-/**
- * Fetch upcoming events from Meetup via GraphQL.
- */
-async function getMeetupEvents(env) {
-  const token = await getAccess(env);
-  const gqlBody = JSON.stringify({
-    query: `
-      query ($slug: String!) {
-        groupByUrlname(urlname: $slug) {
-          events(first: 20, filter: { status: ACTIVE }) {
-            edges {
-              node {
-                id title dateTime description
-                venues { name city state }
-              }
-            }
-          }
-        }
-      }`,
-    variables: { slug: env.GROUP_URLNAME }
-  });
-
-  const res = await fetch('https://api.meetup.com/gql-ext', {
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + token,
-      'User-Agent': 'Mozilla/5.0 (MeetupRSVP)',
-      'content-type': 'application/json'
-    },
-    body: gqlBody
-  });
-
-  if (!res.ok) throw new Error(`Meetup API error: ${res.status}`);
-  const data = await res.json();
-  if (data.errors) throw new Error(`Meetup GQL errors: ${JSON.stringify(data.errors)}`);
-
-  return (data?.data?.groupByUrlname?.events?.edges || []).map(e => {
-    const v = e.node.venues?.[0] || {};
-    return {
-      id:          e.node.id,
-      name:        e.node.title,
-      start_time:  e.node.dateTime,            // ISO 8601
-      description: stripHtml(e.node.description),
-      location:    [v.name, v.city && v.state ? `${v.city}, ${v.state}` : v.city || ''].filter(Boolean).join(' – ')
-    };
-  });
-}
-
-/**
- * Main sync: pull Meetup events, compare to existing Facebook events,
- * update matches and create new ones.
- */
-async function syncToFacebook(env) {
-  const [meetupEvents, fbEventsMap] = await Promise.all([
-    getMeetupEvents(env),
-    getFacebookEvents(env)
-  ]);
-
-  const results = { created: [], updated: [], errors: [] };
-
-  for (const ev of meetupEvents) {
-    const key = matchKey(ev.name, ev.start_time);
-    const fbMatch = fbEventsMap.get(key);
-    const payload = new URLSearchParams({
-      name:        ev.name,
-      start_time:  new Date(ev.start_time).toISOString(),
-      description: ev.description || 'No description provided',
-      access_token: env.FB_PAGE_ACCESS_TOKEN
-    });
-
-    try {
-      if (fbMatch) {
-        /* Update existing FB event */
-        const endpoint = `https://graph.facebook.com/v19.0/${fbMatch.id}`;
-        console.log('[FB Sync] Updating FB event', { endpoint, meetup_id: ev.id, fb_id: fbMatch.id, name: ev.name, start_time: payload.get('start_time'), description: payload.get('description') });
-        const r = await fetch(endpoint, { method: 'POST', body: payload });
-        const text = await r.text();
-        let body;
-        try { body = JSON.parse(text); } catch (e) { body = { raw: text }; }
-        console.log('[FB Sync] FB update response', { status: r.status, body });
-        if (!r.ok || body.error) {
-          const msg = (body && body.error && body.error.message) || `HTTP ${r.status}`;
-          throw new Error(msg);
-        }
-        results.updated.push({ meetup_id: ev.id, fb_id: fbMatch.id, name: ev.name, fb_response: body });
-      } else {
-        /* Create new FB event */
-        const endpoint = `https://graph.facebook.com/v19.0/${env.FB_PAGE_ID}/events`;
-        console.log('[FB Sync] Creating FB event', { endpoint, meetup_id: ev.id, name: ev.name, start_time: payload.get('start_time'), description: payload.get('description') });
-        const r = await fetch(endpoint, { method: 'POST', body: payload });
-        const text = await r.text();
-        let body;
-        try { body = JSON.parse(text); } catch (e) { body = { raw: text }; }
-        console.log('[FB Sync] FB create response', { status: r.status, body });
-        if (!r.ok || body.error) {
-          const msg = (body && body.error && body.error.message) || `HTTP ${r.status}`;
-          throw new Error(msg);
-        }
-        results.created.push({ meetup_id: ev.id, fb_id: body.id, name: ev.name, fb_response: body });
-      }
-    } catch (err) {
-      results.errors.push({ meetup_id: ev.id, name: ev.name, error: err.message });
-    }
-  }
-
-  console.log(`[FB Sync] created=${results.created.length} updated=${results.updated.length} errors=${results.errors.length}`);
-  return results;
 }
 
 /* ---- token‑refresh helper (unchanged from earlier) ---- */
