@@ -4,157 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Leftist-Progressive Night Out! — Mailing List</title>
-    <style>
-      :root{
-        --bg: #0b0f17;
-        --card: #121826;
-        --muted: #8fa3b0;
-        --text: #e6eef4;
-        --accent: rgb(59, 130, 246);
-        --accent-2: rgb(239, 68, 68);
-        --danger: #ef4444;
-        --ring: rgba(37, 0, 250, 0.35);
-        --shadow: 0 10px 25px rgba(0,0,0,.35);
-        --radius-lg: 20px;
-        --radius-sm: 12px;
-      }
-      @media (prefers-color-scheme: light){
-        :root{ --bg:#f7f9fc; --card:#ffffff; --text:#0f172a; --muted:#52606d; --shadow:0 10px 25px rgba(2,6,23,.07);}
-        body{background:linear-gradient(120deg,#eef2ff 0%, #fdf2f8 100%)}
-      }
-      *{box-sizing:border-box}
-      html,body{height:100%}
-      body{
-        margin:0; font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-        color:var(--text); background:radial-gradient(1200px 600px at 10% -10%, rgba(59, 130, 246,.25), transparent 40%),
-        radial-gradient(1000px 500px at 110% 10%, rgba(239, 68, 68,.22), transparent 40%), var(--bg);
-      }
-
-      /* header + layout (same as events) */
-      header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        backdrop-filter: blur(10px);
-        background: color-mix(in oklab, var(--bg), transparent 40%);
-        border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
-        display: flex;
-        flex-direction: column;
-      }
-      .wrap{max-width:1100px; margin:0 auto; padding: 18px 20px}
-      .site-header { position: sticky; top: 0; z-index: 20; }
-      .header-grid {
-        display: grid;
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-        column-gap: 16px;
-        row-gap: 8px;
-        align-items: center;
-      }
-      .header-grid .brand {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-        display: flex;
-        align-items: center;
-      }
-      .header-grid .logo { height: 88px; width:auto; object-fit: contain; }
-      .header-grid h1 {
-        grid-column: 2;
-        grid-row: 1;
-        margin: 0;
-        font-size: 24px;
-      }
-
-      /* nav */
-      .nav-desktop {
-        grid-column: 2;
-        grid-row: 2;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        padding: 8px 0;
-        justify-content: center;
-      }
-      .nav-desktop a{
-        text-decoration: none;
-        color: var(--text);
-        font-weight: 600;
-        font-size: 15px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        transition: color .2s;
-      }
-      .nav-desktop a:hover{ color: var(--accent-2); }
-      .nav-desktop .label{ display:inline; }
-
-      /* shared components from events page */
-      .card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); }
-      .content{padding:20px 20px;}
-      .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
-      .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:12px 12px; border-radius:12px; outline:none}
-      .form input:focus{border-color:var(--accent); box-shadow:0 0 0 6px var(--ring)}
-      .btn{background:var(--accent); color:white; padding:12px 14px; border:none; border-radius:12px; cursor:pointer; box-shadow: var(--shadow); transition:transform .06s ease}
-      .btn:active{transform:translateY(1px)}
-      .empty{color:var(--muted); text-align:center; padding:10px 0}
-
-      .description {
-        background: var(--card);
-        border: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow);
-        padding: 20px 24px;
-        margin: 0 0 24px;
-        text-align: center;
-      }
-      .description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);}
-      .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);}
-
-      .toast{position:fixed; inset: auto 20px 20px auto; background: var(--card); color:var(--text); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); padding:12px 14px; border-radius: 12px; box-shadow: var(--shadow); opacity:0; transform: translateY(10px); pointer-events:none; transition: all .2s ease}
-      .toast.show{opacity:1; transform: translateY(0); pointer-events:auto}
-      .error{color: var(--danger)}
-      footer{color:var(--muted); text-align:center; padding:30px 0 60px}
-      /* Prevent Android text auto-zoom making headings gigantic */
-      html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-
-    /* Tame big headings/paragraphs inside the subscribe page on small screens */
-      .description h2 { font-size: clamp(18px, 5vw, 26px); }
-      .description p  { font-size: clamp(14px, 3.8vw, 16px); }
-
-      /* Your card heading on this page */
-      .card h2,
-      #join-title {
-        font-size: clamp(18px, 5.2vw, 24px);
-        line-height: 1.2;
-        margin: 0 0 10px;
-      }
-
-      /* Make the email form stack cleanly on very small screens */
-      @media (max-width: 480px){
-        .form{ flex-wrap: wrap; }
-        .form input{ flex-basis: 100%; }
-        .form button{ width: 100%; }
-      }
-
-      /* responsive tweaks */
-      @media (max-width:1160px){
-        .nav-desktop .label {font-size:10px; margin-bottom:0; white-space: nowrap; }
-      }
-      @media (max-width:740px){ .header-grid h1 {font-size: 16px;} }
-      @media (max-width:640px){
-        .nav-desktop { gap:16px;}
-        .header-grid .logo { height: 72px; }
-        .header-grid .brand { display:none; }
-      }
-    </style>
-  <link rel="stylesheet" href="/css/plasma.css">
+    <link rel="stylesheet" href="/css/plasma.css">
   </head>
   <body>
     <header class="site-header">
       <div class="wrap header-grid">
         <span class="brand label">
           <a href="events.html" aria-label="Home">
-            <img src="images/lpno.png" alt="LPNO logo" class="logo" />
+            <img src="/assets/images/lpno.png" alt="LPNO logo" class="logo" />
           </a>
         </span>
         <h1 class="title">Leftist-Progressive Night Out!</h1>
@@ -253,3 +110,5 @@
     </script>
   </body>
 </html>
+
+
