@@ -59,7 +59,21 @@ main.wrap{padding-top: 28px}
 .btn:active{transform:translateY(1px)}
 
 .grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:18px}
-.card{background:var(--card); border:1px solid color-mix(in oklab, var(--muted), transparent 80%); border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column}
+.card{
+  /* darker, semi-opaque card to sit above the plasma background */
+  background: color-mix(in oklab, var(--card), black 70%);
+  background-color: rgba(18,24,38,0.85); /* fallback for older browsers */
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(8px) saturate(110%);
+  mix-blend-mode: normal; /* prevent blending with plasma layers */
+  position: relative;
+  z-index: 2;
+}
 .media{position:relative; aspect-ratio: 16/9; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));}
 .media img{width:100%; height:100%; object-fit:cover; display:block}
 .datechip{position:absolute; left:12px; bottom:12px; background: color-mix(in oklab, var(--bg), white 10%); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); color:var(--text); padding:6px 10px; border-radius:999px; font-size:12.5px; backdrop-filter: blur(6px)}
