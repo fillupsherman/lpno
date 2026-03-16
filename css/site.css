@@ -81,9 +81,9 @@ main.wrap{padding-top: 28px}
 .datechip{position:absolute; left:12px; bottom:12px; background: color-mix(in oklab, var(--bg), white 10%); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); color:var(--text); padding:6px 10px; border-radius:999px; font-size:12.5px; backdrop-filter: blur(6px)}
 .content{padding:14px 14px 6px}
 .eyebrow{font-size:12px; color:inherit; letter-spacing:.25px}
-.name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px; color: var(--text);}
+.name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px; color: white;}
 .desc {
-  color: var(--text);
+  color: white;
   margin: 0 0 10px;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -94,8 +94,8 @@ main.wrap{padding-top: 28px}
 .desc.expanded { -webkit-line-clamp: unset; overflow: visible; }
 .toggle-desc { background:none; border:none; color:var(--accent); font-size:13px; cursor:pointer; padding:0; margin-top:-6px; margin-bottom:10px; text-align:left;}
 .toggle-desc:hover { color:var(--accent-2);} 
-.stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:inherit}
-.stats strong{color:var(--text)}
+.stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:white}
+.stats strong{color:white}
 
 .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
 .form input{flex:1; background: color-mix(in oklab, var(--card), black 8%); color:var(--text); border:1px solid transparent; padding:10px 12px; border-radius:12px; outline:none}
