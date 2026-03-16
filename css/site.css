@@ -26,9 +26,10 @@ header {
   position: sticky;
   top: 0;
   z-index: 20;
-  backdrop-filter: blur(10px);
-  background: color-mix(in oklab, var(--bg), transparent 40%);
-  border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
+  backdrop-filter: blur(12px) saturate(120%);
+  background: linear-gradient(180deg, rgba(6,10,16,0.7), rgba(18,24,38,0.45));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;   /* stack title + nav */
 }
@@ -73,6 +74,7 @@ main.wrap{padding-top: 28px}
   mix-blend-mode: normal; /* prevent blending with plasma layers */
   position: relative;
   z-index: 2;
+  color: var(--text);
 }
 .media{position:relative; aspect-ratio: 16/9; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.08));}
 .media img{width:100%; height:100%; object-fit:cover; display:block}
