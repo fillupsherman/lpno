@@ -120,7 +120,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   margin: 0 0 24px;
   text-align: center;
 }
-.description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:var(--text);} 
+.description h2 { font-size: clamp(20px, 2.5vw, 26px); margin:0 0 10px; color:white;} 
 .description p { margin:0 auto; max-width:700px; font-size:15px; line-height:1.6; color:var(--muted);} 
 .description a { color:var(--accent); text-decoration-color: color-mix(in oklab, var(--accent), transparent 60%); transition: color 0.2s ease;} 
 .description a:hover { color: var(--accent-2);} 
