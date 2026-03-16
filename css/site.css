@@ -150,7 +150,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   flex-direction:column;
   align-items:center;
   text-decoration:none;
-  color:var(--text);
+  color:white;
   font-weight:600;
   font-size:15px;
   transition:color 0.2s;
