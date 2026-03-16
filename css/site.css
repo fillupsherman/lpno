@@ -136,7 +136,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 .name-badge { color:#fff; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,0.35); transition: transform 0.15s ease, box-shadow .15s ease; border: 1px solid rgba(255,255,255,0.06); }
 .name-badge:hover { transform:scale(1.06); box-shadow:0 10px 26px rgba(0,0,0,0.5);}
 .location { font-size:13px; color:inherit; margin:2px 0 1px;} 
-.gradient-underline { position:relative; color:var(--muted); text-decoration:none;} 
+.gradient-underline { position:relative; color:white; text-decoration:none;} 
 .gradient-underline::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:linear-gradient(90deg,#ef4444, #ffffff, #3b82f6); border-radius:1px;}
 
 /* nav with icons */
