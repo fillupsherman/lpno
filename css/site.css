@@ -2,7 +2,7 @@
   --bg: #0b0f17;
   --card: #121826;
   --muted: #8fa3b0;
-  --text: #e6eef4;
+  --text: white;
   --accent: rgb(59, 130, 246);
   --accent-2: rgb(239, 68, 68);
   --danger: #ef4444;
@@ -80,10 +80,10 @@ main.wrap{padding-top: 28px}
 .media img{width:100%; height:100%; object-fit:cover; display:block}
 .datechip{position:absolute; left:12px; bottom:12px; background: color-mix(in oklab, var(--bg), white 10%); border:1px solid color-mix(in oklab, var(--muted), transparent 75%); color:var(--text); padding:6px 10px; border-radius:999px; font-size:12.5px; backdrop-filter: blur(6px)}
 .content{padding:14px 14px 6px}
-.eyebrow{font-size:12px; color:var(--muted); letter-spacing:.25px}
+.eyebrow{font-size:12px; color:inherit; letter-spacing:.25px}
 .name{font-size: clamp(18px, 2.2vw, 22px); margin:6px 0 8px; color: var(--text);}
 .desc {
-  color: var(--muted);
+  color: var(--text);
   margin: 0 0 10px;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -94,7 +94,7 @@ main.wrap{padding-top: 28px}
 .desc.expanded { -webkit-line-clamp: unset; overflow: visible; }
 .toggle-desc { background:none; border:none; color:var(--accent); font-size:13px; cursor:pointer; padding:0; margin-top:-6px; margin-bottom:10px; text-align:left;}
 .toggle-desc:hover { color:var(--accent-2);} 
-.stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:var(--muted)}
+.stats{display:flex; gap:10px; align-items:center; font-size:13.5px; color:inherit}
 .stats strong{color:var(--text)}
 
 .form{display:flex; gap:8px; padding:12px 14px 16px; align-items:center}
@@ -131,11 +131,11 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   background-clip: text;
   color: transparent;
 }
-.names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), white 3%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);} 
+.names { margin:12px 0 0; padding:10px; background: color-mix(in oklab, var(--card), black 70%); border:1px solid color-mix(in oklab, var(--muted), transparent 70%); border-radius:var(--radius-sm); display:flex; flex-wrap:wrap; gap:6px; box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);} 
 .names strong { flex-basis:100%; margin-bottom:4px; font-size:13px; color:var(--text);} 
 .name-badge { color:#fff; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:600; white-space:nowrap; box-shadow:0 6px 18px rgba(0,0,0,0.35); transition: transform 0.15s ease, box-shadow .15s ease; border: 1px solid rgba(255,255,255,0.06); }
 .name-badge:hover { transform:scale(1.06); box-shadow:0 10px 26px rgba(0,0,0,0.5);}
-.location { font-size:13px; color:var(--muted); margin:2px 0 1px;} 
+.location { font-size:13px; color:inherit; margin:2px 0 1px;} 
 .gradient-underline { position:relative; color:var(--muted); text-decoration:none;} 
 .gradient-underline::after { content:""; position:absolute; left:0; bottom:-2px; width:100%; height:1px; background:linear-gradient(90deg,#ef4444, #ffffff, #3b82f6); border-radius:1px;}
 
@@ -162,7 +162,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   top: 0;
   z-index: 20;
   backdrop-filter: blur(10px);
-  background: color-mix(in oklab, var(--bg), transparent 40%);
+  background: color-mix(in oklab, var(--card), black 70%, transparent 40%);
   border-bottom: 1px solid color-mix(in oklab, var(--muted), transparent 80%);
 }
 
