@@ -212,7 +212,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 
 .header-grid .nav-desktop a {
   text-decoration: none;
-  color: var(--text);
+  color: white;
   font-weight: 600;
   font-size: 15px;
   display: inline-flex;
