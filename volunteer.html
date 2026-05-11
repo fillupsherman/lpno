@@ -157,7 +157,7 @@
             msg.hidden = true;
             msg.textContent = '';
             grid.innerHTML = '';
-            const res = await fetch('volunteer-opportunities.json', { headers: { 'Accept': 'application/json' }});
+            const res = await fetch('/data/volunteer-opportunities.json', { headers: { 'Accept': 'application/json' }});
             const data = await res.json();
             render(data);
             } catch (err) {

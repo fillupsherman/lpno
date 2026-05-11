@@ -4,3 +4,13 @@
 node_modules/
 # Wrangler logs
 wrangler-*.log
+
+# Facebook sync - session cookies and state (never commit these)
+fb-sync/fb-session.json
+fb-sync/synced-events.json
+fb-sync/*.png
+fb-sync/*.bak*
+fb-sync/node_modules/
+fb-sync/chrome-profile/
+fb-sync/logs/
+fb-sync/tmp/
