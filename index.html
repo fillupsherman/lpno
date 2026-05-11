@@ -56,8 +56,8 @@
       <small>© 2025 Leftist-Progressive Night Out!</small>
     </footer>
 
-    <script>
-      const API = 'https://lpno.lpno-dev.workers.dev';
+    <script type="module">
+      import { API, showToast } from '/js/utils.js';
       const els = {
         list: document.getElementById('events'),
         search: document.getElementById('q'),
@@ -82,12 +82,6 @@
         if (Math.abs(hrs) < 24) return relTime.format(hrs, 'hour');
         const days = Math.round(hrs/24);
         return relTime.format(days, 'day');
-      }
-      function showToast(text, ok=true){
-        els.toast.textContent = text;
-        els.toast.classList.toggle('error', !ok);
-        els.toast.classList.add('show');
-        setTimeout(()=> els.toast.classList.remove('show'), 2200);
       }
       function skeleton(n=6){
         els.list.setAttribute('aria-busy','true');

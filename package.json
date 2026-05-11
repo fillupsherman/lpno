@@ -10,7 +10,8 @@
     "test:utils": "vitest run js"
   },
   "devDependencies": {
-    "vitest": "^4.1.6",
-    "@vitest/coverage-v8": "^4.1.6"
+    "@vitest/coverage-v8": "^4.1.6",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.6"
   }
 }

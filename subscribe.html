@@ -58,19 +58,11 @@
       <small>© 2025 Leftist-Progressive Night Out!</small>
     </footer>
 
-    <script>
-      const API = 'https://lpno.lpno-dev.workers.dev';
+    <script type="module">
+      import { API, showToast, validateEmail } from '/js/utils.js';
 
       const f = document.getElementById('ml-form');
       const m = document.getElementById('ml-msg');
-      const toast = document.getElementById('toast');
-
-      function showToast(text, ok=true){
-        toast.textContent = text;
-        toast.classList.toggle('error', !ok);
-        toast.classList.add('show');
-        setTimeout(()=> toast.classList.remove('show'), 2200);
-      }
 
       f.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -78,7 +70,7 @@
         if (!email) return;
 
         // basic email validation before hitting the network
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (!validateEmail(email)) {
           m.innerHTML = '<span class="error">Please enter a valid email.</span>';
           m.hidden = false;
           return;

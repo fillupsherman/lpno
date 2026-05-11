@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    environment: 'node',
+    environment: 'jsdom',
     passWithNoTests: true,
     include: ['js/**/*.test.js', 'worker/**/*.test.js'],
     coverage: {

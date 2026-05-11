@@ -47,19 +47,11 @@
       <small>© 2025 Leftist-Progressive Night Out!</small>
     </footer>
     
-    <script>
-        const API = 'https://lpno.lpno-dev.workers.dev';
+    <script type="module">
+        import { API, showToast } from '/js/utils.js';
 
         const grid  = document.getElementById('vol-grid');
         const msg   = document.getElementById('msg');
-        const toast = document.getElementById('toast');
-
-        function showToast(text, ok = true){
-            toast.textContent = text;
-            toast.classList.toggle('error', !ok);
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2200);
-        }
 
         function render(opportunities) {
             if (!Array.isArray(opportunities) || opportunities.length === 0) {
