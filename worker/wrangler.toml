@@ -3,9 +3,21 @@ main = "index.js"
 compatibility_date = "2025-07-24"         # today
 
 [[kv_namespaces]]
-binding = "RSVPS"                         # env.RSVPS in code
-id = "4924fad62cc04932a8d8ae14d4433a19"                              # replaced by wrangler
+binding = "RSVPS"
+id = "4924fad62cc04932a8d8ae14d4433a19"
 preview_id = "3f07589fa5ab4d44963ab8726eb51d00"
+
+[[kv_namespaces]]
+binding = "SUBSCRIBERS"
+id = "9482c623fa344fd0b04e0420d1688e8f"
+
+[[kv_namespaces]]
+binding = "VOLUNTEERS"
+id = "b6ff7bd529844350a27f8e297118dc02"
+
+[[kv_namespaces]]
+binding = "SUPPLY_DONATIONS"
+id = "a4df24b046124b0a870f82c269450586"
 
 [vars]
 GROUP_URLNAME = "leftist-progressive-night-out"      # will be overridden in dashboard

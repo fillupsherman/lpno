@@ -154,6 +154,51 @@ export default {
       return json({ ok:true });
     }
 
+    /* ---------- POST /volunteer ---------- */
+    if (req.method === 'POST' && url.pathname === '/volunteer') {
+      try {
+        const { opportunity_id, email, hp = '' } = await req.json().catch(() => ({}));
+        if (hp) return json({ ok: true }); // honeypot -> silently ignore
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          return json({ ok: false, error: 'Invalid email' }, 400);
+        }
+        if (!opportunity_id) {
+          return json({ ok: false, error: 'Missing opportunity' }, 400);
+        }
+        const key = `${email.trim().toLowerCase()}:${opportunity_id}`;
+        await env.VOLUNTEERS.put(key, JSON.stringify({
+          email: email.trim().toLowerCase(),
+          opportunity_id,
+          ts: Date.now()
+        }));
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok: false, error: 'Server error' }, 500);
+      }
+    }
+
+    /* ---------- POST /donate-supplies ---------- */
+    if (req.method === 'POST' && url.pathname === '/donate-supplies') {
+      try {
+        const { email, description } = await req.json().catch(() => ({}));
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          return json({ ok: false, error: 'Invalid email' }, 400);
+        }
+        if (!description || !description.trim()) {
+          return json({ ok: false, error: 'Missing description' }, 400);
+        }
+        const key = `${email.trim().toLowerCase()}:${Date.now()}`;
+        await env.SUPPLY_DONATIONS.put(key, JSON.stringify({
+          email: email.trim().toLowerCase(),
+          description: description.trim(),
+          ts: Date.now()
+        }));
+        return json({ ok: true });
+      } catch (e) {
+        return json({ ok: false, error: 'Server error' }, 500);
+      }
+    }
+
     return json({ error:'Not found' }, 404);
   }
 }
