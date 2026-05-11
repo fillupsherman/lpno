@@ -57,6 +57,7 @@ export default {
                     description
                     venues {
                       name
+                      address
                       city
                       state
                       lat
@@ -116,6 +117,7 @@ export default {
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
           location_name: e.node.venues[0].name,
+          location_address: e.node.venues[0].address || '',
           location_city: e.node.venues[0].city + ', ' + e.node.venues[0].state,
           lat: e.node.venues[0].lat,
           lon: e.node.venues[0].lon
@@ -135,7 +137,8 @@ export default {
         };
       });
 
-      return json(combined);
+      const upcoming = combined.filter(ev => ev.time > Date.now());
+      return json(upcoming);
     }
 
     /* ---------- POST /rsvp ---------- */
