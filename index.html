@@ -8,25 +8,7 @@
     <link rel="stylesheet" href="/css/plasma.css">
   </head>
   <body>
-    <header class="site-header">
-      <div class="wrap header-grid">
-        <span class="brand label">
-          <a href="/index" aria-label="Home">
-            <img src="/assets/images/lpno.png" alt="LPNO logo" class="logo" />
-          </a>
-        </span>
-        <h1 class="title">Leftist-Progressive Night Out!</h1>
-
-        <nav class="nav-desktop">
-          <a href="/index"><span class="label">Events</span></a>
-          <a href="/subscribe"><span class="label">Mailing List</span></a>
-          <a href="/volunteer.html"><span class="label">Volunteer</span></a>
-          <a href="/donate.html"><span class="label">Donate</span></a>
-          <a href="/chapters.html"><span class="label">Chapters</span></a>
-          <a href="/about.html"><span class="label">About</span></a>
-        </nav>
-      </div>
-    </header>
+    <header id="site-header"></header>
 
     <main class="wrap">
       <!--<section class="description">
@@ -52,12 +34,12 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <footer>
-      <small>© 2025 Leftist-Progressive Night Out!</small>
-    </footer>
+    <footer id="site-footer"></footer>
 
     <script type="module">
       import { API, showToast } from '/js/utils.js';
+      import { initHeader, initFooter } from '/js/components.js';
+      initHeader(); initFooter();
       const els = {
         list: document.getElementById('events'),
         search: document.getElementById('q'),
