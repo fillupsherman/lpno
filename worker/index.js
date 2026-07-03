@@ -35,6 +35,30 @@ export default {
       }
     }
     
+    /* ---------- GET /callback (OAuth) ---------- */
+    if (req.method === 'GET' && url.pathname === '/callback') {
+      const code = url.searchParams.get('code');
+      if (!code) return json({ error: 'Missing code' }, 400);
+      const body = new URLSearchParams({
+        client_id:     env.MEETUP_CLIENT_ID,
+        client_secret: env.MEETUP_CLIENT_SECRET,
+        grant_type:    'authorization_code',
+        redirect_uri:  'https://lpno.lpno-dev.workers.dev/callback',
+        code
+      });
+      const r = await fetch('https://secure.meetup.com/oauth2/access', { method: 'POST', body });
+      const j = await r.json();
+      if (!j.access_token) return json({ error: 'Token exchange failed', detail: j }, 502);
+      await env.RSVPS.put('meetup_access', JSON.stringify({
+        token:         j.access_token,
+        expires:       Math.floor(Date.now() / 1000) + (j.expires_in || 3600),
+        refresh_token: j.refresh_token
+      }));
+      return new Response('<h2>✅ Meetup tokens saved! You can close this tab.</h2>', {
+        headers: { 'content-type': 'text/html' }
+      });
+    }
+
     /* ---------- GET /events ---------- */
     if (req.method === 'GET' && url.pathname === '/events') {
       /* 1 – refresh access‑token if needed (same helper you already have) */
@@ -213,15 +237,17 @@ async function getAccess(env) {
     client_id:     env.MEETUP_CLIENT_ID,
     client_secret: env.MEETUP_CLIENT_SECRET,
     grant_type:    'refresh_token',
+    redirect_uri:  'https://lpno.lpno-dev.workers.dev/callback',
     refresh_token: saved.refresh_token || env.MEETUP_REFRESH_TOKEN
   });
 
   const r = await fetch('https://secure.meetup.com/oauth2/access', { method:'POST', body });
   const j = await r.json();
+  if (!j.access_token) throw new Error('Token refresh failed: ' + JSON.stringify(j));
   await env.RSVPS.put(C, JSON.stringify({
     token:         j.access_token,
-    expires:       Math.floor(Date.now()/1000) + j.expires_in,
-    refresh_token: j.refresh_token
+    expires:       Math.floor(Date.now()/1000) + (j.expires_in || 3600),
+    refresh_token: j.refresh_token || saved.refresh_token || env.MEETUP_REFRESH_TOKEN
   }));
   return j.access_token;
 }

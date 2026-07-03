@@ -80,12 +80,18 @@ async function main() {
     await new Promise(r => setTimeout(r, 2000)); // wait for process to fully exit
   } catch (_) { /* Edge wasn't running — no problem */ }
 
+  // Remove profile lock files that can cause a gray/frozen browser
+  const userDataDir = 'C:\\LPNO\\edge-profile';
+  for (const lockFile of ['SingletonLock', 'SingletonCookie', 'SingletonSocket', 'Default\\LOCK']) {
+    try { require('fs').unlinkSync(userDataDir + '\\' + lockFile); } catch (_) {}
+  }
+
   const headlessMode = process.env.HEADLESS === '1' || process.env.HEADLESS === 'true';
   const browser = await puppeteer.launch({
     headless: headlessMode,
     defaultViewport: null,
     executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    userDataDir: process.env.LOCALAPPDATA + '\\Microsoft\\Edge\\User Data',
+    userDataDir: 'C:\\LPNO\\edge-profile',
     args: headlessMode ? ['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'] : ['--profile-directory=Default','--start-maximized','--no-sandbox'],
     // increase CDP protocol timeout for long UI interactions
     protocolTimeout: 120000
