@@ -14,3 +14,6 @@ fb-sync/node_modules/
 fb-sync/chrome-profile/
 fb-sync/logs/
 fb-sync/tmp/
+
+# Worker local state
+worker/tmp_kv.json
