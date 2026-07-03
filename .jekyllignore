@@ -1,0 +1,6 @@
+fb-sync/
+worker/
+package.json
+package-lock.json
+vitest.config.js
+js/*.test.js
