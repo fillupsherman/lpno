@@ -213,14 +213,15 @@ async function getAccess(env) {
     client_id:     env.MEETUP_CLIENT_ID,
     client_secret: env.MEETUP_CLIENT_SECRET,
     grant_type:    'refresh_token',
-    refresh_token: env.MEETUP_REFRESH_TOKEN
+    refresh_token: saved.refresh_token || env.MEETUP_REFRESH_TOKEN
   });
 
   const r = await fetch('https://secure.meetup.com/oauth2/access', { method:'POST', body });
   const j = await r.json();
   await env.RSVPS.put(C, JSON.stringify({
-    token:   j.access_token,
-    expires: Math.floor(Date.now()/1000) + j.expires_in
+    token:         j.access_token,
+    expires:       Math.floor(Date.now()/1000) + j.expires_in,
+    refresh_token: j.refresh_token
   }));
   return j.access_token;
 }

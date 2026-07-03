@@ -1,6 +1,7 @@
 name = "lpno"
 main = "index.js"
 compatibility_date = "2025-07-24"         # today
+account_id = "cf3dea5ba054343c32f8e80e1902a8dc"
 
 [[kv_namespaces]]
 binding = "RSVPS"

@@ -155,41 +155,18 @@ async function handleDeletedMeetupEvents(browser, synced, deletedFbIds) {
         await sleep(2000);
       } catch (e) { /* ignore */ }
 
-      // Verify deletion
-      try {
-        await Promise.race([
-          page.goto(fbUrl, { waitUntil: 'networkidle2' }),
-          new Promise((_, rej) => setTimeout(() => rej(new Error('verify goto timeout')), 15000)),
-        ]);
-      } catch (e) { /* ignore */ }
-
-      const missing = await page.evaluate(() => {
-        const body = (document && document.body && document.body.innerText || '').toLowerCase();
-        return body.includes('not found') ||
-               body.includes('content not available') ||
-               body.includes('this event isn') ||
-               body.includes('sorry, this page isn') ||
-               body.includes('cancelled') ||
-               body.includes('canceled') ||
-               !!document.querySelector('[data-testid="error"]') ||
-               !!document.querySelector('form[action*="/login.php"]');
-      });
-
-      if (missing) {
-        delete synced[id];
-        saveSynced(synced);
-        results.success++;
-        console.log(`Deleted FB event ${id} — success.`);
-      } else {
-        delete synced[id];
-        saveSynced(synced);
-        results.success++;
-        console.log(`Deleted FB event ${id} — success (page still loading post-delete).`);
-      }
+      results.success++;
+      console.log(`Deleted FB event ${id} from Facebook.`);
     } catch (err) {
       results.failed++;
       console.error(`Failed to delete FB event ${id}:`, err.message);
     } finally {
+      // Always remove from synced-events.json after attempting FB deletion
+      if (synced[id]) {
+        delete synced[id];
+        saveSynced(synced);
+        console.log(`Removed FB event ${id} from synced records.`);
+      }
       try { if (page && !page.isClosed()) await page.close(); } catch (e) {}
     }
   }

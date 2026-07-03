@@ -73,6 +73,13 @@ async function main() {
 
   console.log(`${toCreate.length} new event(s) to create, ${toUpdate.length} event(s) to update.`);
 
+  // Kill any running Edge processes so Puppeteer can take over the profile
+  try {
+    require('child_process').execSync('taskkill /F /IM msedge.exe', { stdio: 'ignore' });
+    console.log('Closed running Edge instance.');
+    await new Promise(r => setTimeout(r, 2000)); // wait for process to fully exit
+  } catch (_) { /* Edge wasn't running — no problem */ }
+
   const headlessMode = process.env.HEADLESS === '1' || process.env.HEADLESS === 'true';
   const browser = await puppeteer.launch({
     headless: headlessMode,
