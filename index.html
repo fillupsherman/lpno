@@ -152,19 +152,34 @@
           `;
           } else {
             form.className = 'form';
+            // make the button a non-submit button so clicks won't post anywhere
             form.innerHTML = `
-            <input name="name" placeholder="Your name" aria-label="Your name" required />
-            <button class="btn">RSVP</button>
+            <input name="name" placeholder="Your name" aria-label="Your name" />
+            <button type="button" class="btn">RSVP</button>
           `;
           }
-          
 
-          // Make the RSVP button dead: prevent submit and do nothing (optionally show a toast)
+          // Ensure the form cannot be submitted programmatically or cause any network activity.
+          // 1) Override the submit method to a no-op.
+          // 2) Prevent the submit event if it fires.
+          // 3) Handle the visible button click to be inert (optional toast).
+          form.submit = () => {};
           form.addEventListener('submit', (e) => {
             e.preventDefault();
+            e.stopImmediatePropagation();
             try { showToast('RSVP is disabled.', false); } catch (err) {}
-            return;
-          });
+            return false;
+          }, {capture: true});
+
+          const btn = form.querySelector('button');
+          if (btn) {
+            btn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              try { showToast('RSVP is disabled.', false); } catch (err) {}
+            });
+          }
+
           card.appendChild(form);
           frag.appendChild(card);
         });
