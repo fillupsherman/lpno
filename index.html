@@ -14,7 +14,7 @@
       <!--<section class="description">
         <h2>About Our Club</h2>
         <p>
-          Leftist-Progressive Night Out! is a NJ based social club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists of every 
+          Leftist-Progressive Night Out! is a NJ based social club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists of e[...]
           type! Come get to know other progressives! Have fun and relax with other politically and socially progressive people in a variety of different 
           environments! We'll be having pub nights, movie nights, game nights, pizza nights, dinner parties, and anything else that sounds like a fun night. 
           Brainstorm, network, or just enjoy the activities with other people you'll probably like!
@@ -22,7 +22,7 @@
       </section>-->
       <div class="toolbar">
         <div class="search" role="search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="1.[...]"/></svg>
           <input id="q" placeholder="Search by name or description…" aria-label="Search events" />
         </div>
         <button id="refresh" class="btn" type="button" title="Refresh">Refresh</button>
@@ -143,7 +143,29 @@
                 : ''
             }
           `;
+          card.appendChild(content);
+          const form = document.createElement('form');
+          if (ev.total_rsvps >= 20) {
+            form.className = 'form';
+            form.innerHTML = `
+            <span><strong>This event is full.</strong></span>
+          `;
+          } else {
+            form.className = 'form';
+            form.innerHTML = `
+            <input name="name" placeholder="Your name" aria-label="Your name" required />
+            <button class="btn">RSVP</button>
+          `;
+          }
           
+
+          // Make the RSVP button dead: prevent submit and do nothing (optionally show a toast)
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            try { showToast('RSVP is disabled.', false); } catch (err) {}
+            return;
+          });
+          card.appendChild(form);
           frag.appendChild(card);
         });
         els.list.innerHTML = '';
@@ -188,5 +210,3 @@
     </script>
   </body>
 </html>
-
-
