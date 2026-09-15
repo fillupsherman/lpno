@@ -143,42 +143,7 @@
                 : ''
             }
           `;
-          card.appendChild(content);
-          const form = document.createElement('form');
-          if (ev.total_rsvps >= 20) {
-            form.className = 'form';
-            form.innerHTML = `
-            <span><strong>This event is full.</strong></span>
-          `;
-          } else {
-            form.className = 'form';
-            form.innerHTML = `
-            <input name="name" placeholder="Your name" aria-label="Your name" required />
-            <button class="btn">RSVP</button>
-          `;
-          }
           
-
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = form.name.value.trim();
-            if (!name) return;
-            const payload = { event_id: ev.id, name };
-            form.querySelector('button').disabled = true;
-            try{
-              const res = await fetch(`${API}/rsvp`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-              if (!res.ok) throw new Error(`RSVP failed (${res.status})`);
-              showToast('RSVP saved!');
-              await load();
-            }catch(err){
-              console.error(err);
-              showToast('Could not save RSVP.', false);
-            }finally{
-              form.reset();
-              form.querySelector('button').disabled = false;
-            }
-          });
-          card.appendChild(form);
           frag.appendChild(card);
         });
         els.list.innerHTML = '';
