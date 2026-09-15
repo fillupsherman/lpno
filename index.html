@@ -144,33 +144,25 @@
             }
           `;
           card.appendChild(content);
-          const form = document.createElement('form');
+
+          // Use a non-form container so there is no form semantics or serialization.
+          const form = document.createElement('div');
+          form.className = 'form';
+
           if (ev.total_rsvps >= 20) {
-            form.className = 'form';
             form.innerHTML = `
             <span><strong>This event is full.</strong></span>
           `;
           } else {
-            form.className = 'form';
-            // make the button a non-submit button so clicks won't post anywhere
+            // input has a name attribute but there is no form to submit
+            // button is type=button and there is no form to submit
             form.innerHTML = `
             <input name="name" placeholder="Your name" aria-label="Your name" />
             <button type="button" class="btn">RSVP</button>
           `;
           }
 
-          // Ensure the form cannot be submitted programmatically or cause any network activity.
-          // 1) Override the submit method to a no-op.
-          // 2) Prevent the submit event if it fires.
-          // 3) Handle the visible button click to be inert (optional toast).
-          form.submit = () => {};
-          form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            try { showToast('RSVP is disabled.', false); } catch (err) {}
-            return false;
-          }, {capture: true});
-
+          // Make the visible button inert and ensure there are no references to the backend here.
           const btn = form.querySelector('button');
           if (btn) {
             btn.addEventListener('click', (e) => {
