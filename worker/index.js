@@ -22,37 +22,36 @@ export default {
     if (req.method === 'POST' && url.pathname === '/subscribe') {
       try {
         const { email, hp = '' } = await req.json().catch(() => ({}));
-        if (hp) return json({ ok: true }); // honeypot -> silently ignore
+        if (hp) return json({ ok: true });
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           return json({ ok:false, error:'Invalid email' }, 400);
         }
         const key = email.trim().toLowerCase();
         await env.SUBSCRIBERS.put(key, JSON.stringify({ email:key, ts:Date.now() }));
-        // TODO (optional): call Mailchimp/ConvertKit/Resend webhook here
         return json({ ok: true });
       } catch (e) {
         return json({ ok:false, error:'Server error' }, 500);
       }
     }
-    
+
     /* ---------- GET /callback (OAuth) ---------- */
     if (req.method === 'GET' && url.pathname === '/callback') {
       const code = url.searchParams.get('code');
       if (!code) return json({ error: 'Missing code' }, 400);
       const body = new URLSearchParams({
-        client_id:     env.MEETUP_CLIENT_ID,
+        client_id: env.MEETUP_CLIENT_ID,
         client_secret: env.MEETUP_CLIENT_SECRET,
-        grant_type:    'authorization_code',
-        redirect_uri:  'https://lpno.lpno-dev.workers.dev/callback',
+        grant_type: 'authorization_code',
+        redirect_uri: 'https://lpno.lpno-dev.workers.dev/callback',
         code
       });
       const r = await fetch('https://secure.meetup.com/oauth2/access', { method: 'POST', body });
       const j = await r.json();
       if (!j.access_token) return json({ error: 'Token exchange failed', detail: j }, 502);
       await env.RSVPS.put('meetup_access', JSON.stringify({
-        token:         j.access_token,
-        expires:       Math.floor(Date.now() / 1000) + (j.expires_in || 3600),
-        refresh_token:  j.refresh_token
+        token: j.access_token,
+        expires: Math.floor(Date.now() / 1000) + (j.expires_in || 3600),
+        refresh_token: j.refresh_token
       }));
       return new Response('<h2>✅ Meetup tokens saved! You can close this tab.</h2>', {
         headers: { 'content-type': 'text/html' }
@@ -61,18 +60,12 @@ export default {
 
     /* ---------- GET /events ---------- */
     if (req.method === 'GET' && url.pathname === '/events') {
-      /* 1 – refresh access‑token if needed (same helper you already have) */
-      const token = await getAccess(env);   // see below
-
-      /* 2 – GraphQL POST */
+      const token = await getAccess(env);
       const gqlBody = JSON.stringify({
         query: `
           query ($slug: String!) {
             groupByUrlname(urlname: $slug) {
-              events(
-                first: 20,
-                filter: { status: ACTIVE }
-              ) {
+              events(first: 20, filter: { status: ACTIVE }) {
                 edges {
                   node {
                     id
@@ -87,9 +80,7 @@ export default {
                       lat
                       lon
                     }
-                    rsvps {
-                      totalCount
-                    }
+                    rsvps { totalCount }
                     featuredEventPhoto {
                       baseUrl
                       id
@@ -101,7 +92,6 @@ export default {
           }`,
         variables: { slug: env.GROUP_URLNAME }
       });
-
 
       const res = await fetch('https://api.meetup.com/gql-ext', {
         method: 'POST',
@@ -117,13 +107,13 @@ export default {
       });
 
       if (!res.ok) return json({ error:'Meetup API error', status:res.status }, 502);
-
       const data = await res.json();
       if (data.errors) return json({ api_errors: data.errors }, 502);
+
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => {
         const photo = e.node.featuredEventPhoto;
-        console.log(e.node.venues);
+        const venue = e.node.venues?.[0] || {};
         return {
           id: e.node.id,
           name: e.node.title,
@@ -131,30 +121,27 @@ export default {
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
-          location_name: e.node.venues[0].name,
-          location_address: e.node.venues[0].address || '',
-          location_city: e.node.venues[0].city + ', ' + e.node.venues[0].state,
-          lat: e.node.venues[0].lat,
-          lon: e.node.venues[0].lon
+          location_name: venue.name,
+          location_address: venue.address || '',
+          location_city: venue.city ? `${venue.city}, ${venue.state || ''}` : '',
+          lat: venue.lat,
+          lon: venue.lon
         };
       });
 
-      // Merge local RSVPs. Attendee names intentionally come only from local RSVPs;
-      // Meetup attendee names are not requested or returned.
+      // Meetup provides only an aggregate count. No attendee names are requested,
+      // stored, or returned by this endpoint.
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
       const combined = eventsArray.map(ev => {
-        const localNames = local[ev.id] || [];
+        const localCount = Array.isArray(local[ev.id]) ? local[ev.id].length : 0;
         return {
           ...ev,
-          local_rsvps: localNames.length,
-          local_names: localNames,
-          total_rsvps: ev.meetup_rsvps + localNames.length,
-          all_names: localNames
+          local_rsvps: localCount,
+          total_rsvps: ev.meetup_rsvps + localCount
         };
       });
 
-      const upcoming = combined.filter(ev => ev.time > Date.now());
-      return json(upcoming);
+      return json(combined.filter(ev => ev.time > Date.now()));
     }
 
     /* ---------- POST /rsvp ---------- */
@@ -166,7 +153,6 @@ export default {
       store[event_id] = store[event_id] || [];
       if (!store[event_id].includes(name.trim())) store[event_id].push(name.trim());
       await env.RSVPS.put('data', JSON.stringify(store));
-
       return json({ ok:true });
     }
 
@@ -174,18 +160,14 @@ export default {
     if (req.method === 'POST' && url.pathname === '/volunteer') {
       try {
         const { opportunity_id, email, hp = '' } = await req.json().catch(() => ({}));
-        if (hp) return json({ ok: true }); // honeypot -> silently ignore
+        if (hp) return json({ ok: true });
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           return json({ ok: false, error: 'Invalid email' }, 400);
         }
-        if (!opportunity_id) {
-          return json({ ok: false, error: 'Missing opportunity' }, 400);
-        }
+        if (!opportunity_id) return json({ ok: false, error: 'Missing opportunity' }, 400);
         const key = `${email.trim().toLowerCase()}:${opportunity_id}`;
         await env.VOLUNTEERS.put(key, JSON.stringify({
-          email: email.trim().toLowerCase(),
-          opportunity_id,
-          ts: Date.now()
+          email: email.trim().toLowerCase(), opportunity_id, ts: Date.now()
         }));
         return json({ ok: true });
       } catch (e) {
@@ -205,9 +187,7 @@ export default {
         }
         const key = `${email.trim().toLowerCase()}:${Date.now()}`;
         await env.SUPPLY_DONATIONS.put(key, JSON.stringify({
-          email: email.trim().toLowerCase(),
-          description: description.trim(),
-          ts: Date.now()
+          email: email.trim().toLowerCase(), description: description.trim(), ts: Date.now()
         }));
         return json({ ok: true });
       } catch (e) {
@@ -219,26 +199,24 @@ export default {
   }
 }
 
-/* ---- token‑refresh helper (unchanged from earlier) ---- */
 async function getAccess(env) {
   const C = 'meetup_access';
   const saved = await env.RSVPS.get(C, { type:'json' }) || {};
   if (saved.token && saved.expires > Date.now()/1000 + 60) return saved.token;
 
   const body = new URLSearchParams({
-    client_id:     env.MEETUP_CLIENT_ID,
+    client_id: env.MEETUP_CLIENT_ID,
     client_secret: env.MEETUP_CLIENT_SECRET,
-    grant_type:    'refresh_token',
-    redirect_uri:  'https://lpno.lpno-dev.workers.dev/callback',
+    grant_type: 'refresh_token',
+    redirect_uri: 'https://lpno.lpno-dev.workers.dev/callback',
     refresh_token: saved.refresh_token || env.MEETUP_REFRESH_TOKEN
   });
-
   const r = await fetch('https://secure.meetup.com/oauth2/access', { method:'POST', body });
   const j = await r.json();
   if (!j.access_token) throw new Error('Token refresh failed: ' + JSON.stringify(j));
   await env.RSVPS.put(C, JSON.stringify({
-    token:         j.access_token,
-    expires:       Math.floor(Date.now()/1000) + (j.expires_in || 3600),
+    token: j.access_token,
+    expires: Math.floor(Date.now()/1000) + (j.expires_in || 3600),
     refresh_token: j.refresh_token || saved.refresh_token || env.MEETUP_REFRESH_TOKEN
   }));
   return j.access_token;

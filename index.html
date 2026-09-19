@@ -9,31 +9,18 @@
   </head>
   <body>
     <header id="site-header"></header>
-
     <main class="wrap">
-      <!--<section class="description">
-        <h2>About Our Club</h2>
-        <p>
-          Leftist-Progressive Night Out! is a NJ based social club for like-minded people to build strength and power through community during troubled times. We welcome progressives and leftists [...]
-          type! Come get to know other progressives! Have fun and relax with other politically and socially progressive people in a variety of different 
-          environments! We'll be having pub nights, movie nights, game nights, pizza nights, dinner parties, and anything else that sounds like a fun night. 
-          Brainstorm, network, or just enjoy the activities with other people you'll probably like!
-        </p>
-      </section>-->
       <div class="toolbar">
         <div class="search" role="search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0 15 7.5 7.5 0 0 1 0-15z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           <input id="q" placeholder="Search by name or description…" aria-label="Search events" />
         </div>
         <button id="refresh" class="btn" type="button" title="Refresh">Refresh</button>
       </div>
-
       <div id="events" class="grid" aria-live="polite" aria-busy="true"></div>
       <p id="msg" class="empty" hidden></p>
     </main>
-
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
     <footer id="site-footer"></footer>
 
     <script type="module">
@@ -44,30 +31,25 @@
         list: document.getElementById('events'),
         search: document.getElementById('q'),
         refresh: document.getElementById('refresh'),
-        msg: document.getElementById('msg'),
-        toast: document.getElementById('toast')
+        msg: document.getElementById('msg')
       };
       const fmtDate = new Intl.DateTimeFormat(navigator.language || 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
       const relTime = new Intl.RelativeTimeFormat(navigator.language || 'en-US', { numeric: 'auto' });
-
       const escapeHTML = (s='') => s
         .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
         .replaceAll('"','&quot;').replaceAll("'",'&#39;');
 
       function whenRelative(iso){
-        const now = Date.now();
-        const t = new Date(iso).getTime();
-        const diff = t - now;
-        const mins = Math.round(diff/60000);
+        const diff = new Date(iso).getTime() - Date.now();
+        const mins = Math.round(diff / 60000);
         if (Math.abs(mins) < 60) return relTime.format(mins, 'minute');
-        const hrs = Math.round(mins/60);
+        const hrs = Math.round(mins / 60);
         if (Math.abs(hrs) < 24) return relTime.format(hrs, 'hour');
-        const days = Math.round(hrs/24);
-        return relTime.format(days, 'day');
+        return relTime.format(Math.round(hrs / 24), 'day');
       }
       function skeleton(n=6){
         els.list.setAttribute('aria-busy','true');
-        els.list.innerHTML = Array.from({length:n}).map(()=>`<div class="skeleton"></div>`).join('');
+        els.list.innerHTML = Array.from({length:n}).map(()=>'<div class="skeleton"></div>').join('');
         els.msg.hidden = true;
       }
       function render(events) {
@@ -78,123 +60,74 @@
           return;
         }
         const q = els.search.value.trim().toLowerCase();
-        const filtered = q ? events.filter(e => (e.name+" "+(e.description||'')).toLowerCase().includes(q)) : events;
+        const filtered = q ? events.filter(e => (e.name + ' ' + (e.description || '')).toLowerCase().includes(q)) : events;
         if (filtered.length === 0){
           els.list.innerHTML = '';
           els.msg.hidden = false; els.msg.textContent = 'No matches for your search.';
           return;
-        } else { els.msg.hidden = true; }
+        }
+        els.msg.hidden = true;
         const frag = document.createDocumentFragment();
         filtered.forEach(ev => {
           const card = document.createElement('article');
           card.className = 'card';
           card.setAttribute('data-id', ev.id);
           card.tabIndex = 0;
-          const hasImg = !!ev.image_url;
           const media = document.createElement('div');
           media.className = 'media';
-          if (hasImg){
+          if (ev.image_url){
             const img = document.createElement('img');
             img.src = ev.image_url; img.alt = `${ev.name} banner`; img.loading = 'lazy'; img.decoding = 'async';
             media.appendChild(img);
           }
           const chip = document.createElement('div');
-          chip.className = 'datechip';
-          chip.textContent = whenRelative(ev.time);
-          media.appendChild(chip);
-          card.appendChild(media);
+          chip.className = 'datechip'; chip.textContent = whenRelative(ev.time);
+          media.appendChild(chip); card.appendChild(media);
           const content = document.createElement('div');
           content.className = 'content';
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.lat},${ev.lon}`;
-          const localNames = Array.isArray(ev.all_names) ? ev.all_names : [];
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
-              <div class="location">
-                <a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">
-                  ${escapeHTML(ev.location_name || 'Location TBD')}
-                </a>
-              </div>
-              <div class="location">
-                <a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">
-                  ${escapeHTML(ev.location_city || 'Location TBD')}
-                </a>
-              </div>
+            <div class="location"><a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">${escapeHTML(ev.location_name || 'Location TBD')}</a></div>
+            <div class="location"><a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">${escapeHTML(ev.location_city || 'Location TBD')}</a></div>
             <h2 class="name">${escapeHTML(ev.name || 'Untitled')}</h2>
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
-            ${
-              ev.description && ev.description.length > 180
-                ? `<button class="toggle-desc">Read more</button>`
-                : ''
-            }
+            ${ev.description && ev.description.length > 180 ? '<button class="toggle-desc">Read more</button>' : ''}
             <div class="stats" aria-label="RSVP counts">
-              <span><strong>${Number(ev.total_rsvps||0).toLocaleString()}</strong> RSVPs</span>
-              <span>• Meetup: ${Number(ev.meetup_rsvps||0).toLocaleString()}</span>
-              <span>• Site: ${Number(ev.local_rsvps||0).toLocaleString()}</span>
+              <span><strong>${Number(ev.total_rsvps || 0).toLocaleString()}</strong> RSVPs</span>
+              <span>• Meetup: ${Number(ev.meetup_rsvps || 0).toLocaleString()}</span>
+              <span>• Site: ${Number(ev.local_rsvps || 0).toLocaleString()}</span>
             </div>
-            <div class="names" aria-label="Local attendance">
-              <strong style="display:block; width:100%; font-size:clamp(1.6rem,5vw,3rem); line-height:1; letter-spacing:.04em; text-transform:uppercase; text-align:center; color:#fff; background:linear-gradient(90deg,#ef4444,#fff,#3b82f6); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px;"># Rebel Scum Attending</strong>
-              ${localNames.length
-                ? localNames.map((n, i) => {
-                    const colors = ['#ef4444', '#fff', '#3b82f6'];
-                    const color = colors[i % colors.length];
-                    return `<span class="name-badge" style="background:${color}; color:${color === '#fff' ? '#000' : '#fff'}">${escapeHTML(n)}</span>`;
-                  }).join('')
-                : '<span style="display:block; text-align:center; color:var(--muted);">No local RSVPs yet.</span>'}
+            <div class="names" aria-label="Attendance">
+              <strong class="attendance-heading">${Number(ev.total_rsvps || 0).toLocaleString()} Rebel Scum Attending</strong>
             </div>
           `;
           card.appendChild(content);
-
-          // Use a non-form container so there is no form semantics or serialization.
           const form = document.createElement('div');
           form.className = 'form';
-
-          if (ev.total_rsvps >= 20) {
-            form.innerHTML = `
-            <span><strong>This event is full.</strong></span>
-          `;
-          } else {
-            // input has a name attribute but there is no form to submit
-            // button is type=button and there is no form to submit
-            form.innerHTML = `
-            <input name="name" placeholder="Your name" aria-label="Your name" />
-            <button type="button" class="btn">RSVP</button>
-          `;
-          }
-
-          // Make the visible button inert and ensure there are no references to the backend here.
+          form.innerHTML = ev.total_rsvps >= 20
+            ? '<span><strong>This event is full.</strong></span>'
+            : '<input name="name" placeholder="Your name" aria-label="Your name" /><button type="button" class="btn">RSVP</button>';
           const btn = form.querySelector('button');
-          if (btn) {
-            btn.addEventListener('click', (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              try { showToast('RSVP is disabled.', false); } catch (err) {}
-            });
+          if (btn) btn.addEventListener('click', e => {
+            e.preventDefault(); e.stopPropagation();
+            try { showToast('RSVP is disabled.', false); } catch (err) {}
+          });
+          card.appendChild(form); frag.appendChild(card);
+        });
+        els.list.innerHTML = ''; els.list.appendChild(frag);
+        document.querySelectorAll('.toggle-desc').forEach(btn => btn.addEventListener('click', () => {
+          const desc = btn.previousElementSibling;
+          desc.classList.toggle('expanded');
+          btn.textContent = desc.classList.contains('expanded') ? 'Show less' : 'Read more';
+        }));
+        const obs = new IntersectionObserver(entries => entries.forEach(en => {
+          if (en.isIntersecting){
+            en.target.animate([{transform:'translateY(8px)', opacity:.001}, {transform:'translateY(0)', opacity:1}], {duration:260, easing:'cubic-bezier(.2,.8,.2,1)'});
+            obs.unobserve(en.target);
           }
-
-          card.appendChild(form);
-          frag.appendChild(card);
-        });
-        els.list.innerHTML = '';
-        els.list.appendChild(frag);
-        document.querySelectorAll('.toggle-desc').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const desc = btn.previousElementSibling;
-            desc.classList.toggle('expanded');
-            btn.textContent = desc.classList.contains('expanded') ? 'Show less' : 'Read more';
-          });
-        });
-        const obs = new IntersectionObserver(entries=>{
-          entries.forEach(en=>{
-            if (en.isIntersecting){
-              en.target.animate([
-                {transform:'translateY(8px)', opacity:.001},
-                {transform:'translateY(0)', opacity:1}
-              ], {duration:260, easing:'cubic-bezier(.2,.8,.2,1)'});
-              obs.unobserve(en.target);
-            }
-          });
-        },{rootMargin:'0px 0px -10% 0px'});
-        document.querySelectorAll('.card').forEach(el=>obs.observe(el));
+        }), {rootMargin:'0px 0px -10% 0px'});
+        document.querySelectorAll('.card').forEach(el => obs.observe(el));
       }
       async function load(){
         skeleton();
@@ -202,17 +135,13 @@
           const res = await fetch(`${API}/events`, { headers:{'Accept':'application/json'} });
           const events = await res.json();
           if (!Array.isArray(events)) throw new Error(events && (events.error || JSON.stringify(events)) || 'Invalid response');
-          events.sort((a,b)=> new Date(a.time) - new Date(b.time));
-          render(events);
-        }catch(err){
-          console.error(err);
-          els.list.innerHTML = '';
-          els.msg.hidden = false;
-          els.msg.innerHTML = `<span class="error">Error loading events.</span> <small>${escapeHTML(String(err.message||err))}</small>`
+          events.sort((a,b) => new Date(a.time) - new Date(b.time)); render(events);
+        } catch(err) {
+          console.error(err); els.list.innerHTML = ''; els.msg.hidden = false;
+          els.msg.innerHTML = `<span class="error">Error loading events.</span> <small>${escapeHTML(String(err.message || err))}</small>`;
         }
       }
-      els.refresh.addEventListener('click', load);
-      load();
+      els.refresh.addEventListener('click', load); load();
     </script>
   </body>
 </html>
