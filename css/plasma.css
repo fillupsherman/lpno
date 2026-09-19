@@ -32,14 +32,18 @@ body::after{
   opacity: 0.92;
 }
 
-/* Keep the attendance callout loud even when other text rules apply. */
 .names {
   margin: 12px 0 0;
   padding: 14px 12px;
-  background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(13,17,28,.98));
+  background: linear-gradient(180deg, rgba(17,24,39,.98), rgba(13,17,28,.99));
   border: 3px solid #fff;
   border-radius: 14px;
-  box-shadow: 0 0 0 3px #ef4444, 0 0 0 7px #3b82f6, 0 0 28px rgba(255,255,255,.9), 0 0 48px rgba(239,68,68,.75), 0 0 64px rgba(59,130,246,.65);
+  box-shadow:
+    0 0 0 3px #ef4444,
+    0 0 0 7px #3b82f6,
+    0 0 16px rgba(255,255,255,.65),
+    0 0 28px rgba(239,68,68,.5),
+    0 0 36px rgba(59,130,246,.45);
   transform: rotate(-1deg);
 }
 
@@ -55,28 +59,14 @@ body::after{
   text-align: center;
   font-weight: 1000 !important;
   color: #fff !important;
-  background: linear-gradient(90deg, #ff1717 0%, #fff 32%, #fff 68%, #146bff 100%) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  text-shadow: 0 0 10px #fff, 0 0 20px #ef4444, 0 0 32px #3b82f6 !important;
-  filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 18px #ef4444) drop-shadow(0 0 28px #3b82f6);
-  animation: rebel-scum-pulse 1.15s ease-in-out infinite alternate, rebel-scum-gradient 3s linear infinite;
-}
-
-@keyframes rebel-scum-pulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.06); }
-}
-
-@keyframes rebel-scum-gradient {
-  from { background-position: 0% center; }
-  to { background-position: 200% center; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .attendance-heading { animation: none; }
+  -webkit-text-stroke: 1px rgba(0,0,0,.9);
+  text-shadow:
+    2px 2px 0 #080b12,
+    -2px -2px 0 #080b12,
+    2px -2px 0 #080b12,
+    -2px 2px 0 #080b12,
+    0 0 8px rgba(255,255,255,.55);
+  filter: none;
 }
 
 /* make sure core layout sits above the background layers */
