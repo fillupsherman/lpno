@@ -52,7 +52,7 @@ export default {
       await env.RSVPS.put('meetup_access', JSON.stringify({
         token:         j.access_token,
         expires:       Math.floor(Date.now() / 1000) + (j.expires_in || 3600),
-        refresh_token: j.refresh_token
+        refresh_token:  j.refresh_token
       }));
       return new Response('<h2>✅ Meetup tokens saved! You can close this tab.</h2>', {
         headers: { 'content-type': 'text/html' }
@@ -87,15 +87,8 @@ export default {
                       lat
                       lon
                     }
-                    rsvps { 
-                      totalCount 
-                      edges {
-                        node {
-                          member {
-                            name
-                          }
-                        }
-                      }
+                    rsvps {
+                      totalCount
                     }
                     featuredEventPhoto {
                       baseUrl
@@ -130,14 +123,12 @@ export default {
       const edges = data?.data?.groupByUrlname?.events?.edges || [];
       const eventsArray = edges.map(e => {
         const photo = e.node.featuredEventPhoto;
-        const meetupNames = e.node.rsvps?.edges?.map(r => r.node.member.name) || [];
         console.log(e.node.venues);
         return {
           id: e.node.id,
           name: e.node.title,
           time: new Date(e.node.dateTime).getTime(),
           meetup_rsvps: e.node.rsvps?.totalCount ?? 0,
-          meetup_names: meetupNames,
           image_url: photo ? `${photo.baseUrl}${photo.id}/1024x576.jpg` : null,
           description: e.node.description,
           location_name: e.node.venues[0].name,
@@ -148,7 +139,8 @@ export default {
         };
       });
 
-      // merge local RSVPs
+      // Merge local RSVPs. Attendee names intentionally come only from local RSVPs;
+      // Meetup attendee names are not requested or returned.
       const local = await env.RSVPS.get('data', { type: 'json' }) || {};
       const combined = eventsArray.map(ev => {
         const localNames = local[ev.id] || [];
@@ -157,7 +149,7 @@ export default {
           local_rsvps: localNames.length,
           local_names: localNames,
           total_rsvps: ev.meetup_rsvps + localNames.length,
-          all_names: [...ev.meetup_names, ...localNames]
+          all_names: localNames
         };
       });
 
