@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Leftist-Progressive Night Out!</title>
     <link rel="stylesheet" href="/css/site.css">
-    <link rel="stylesheet" href="/css/plasma.css">
+    <link rel="stylesheet" href="/css/plasma.css?v=20260919-readable">
   </head>
   <body>
     <header id="site-header"></header>
@@ -86,6 +86,7 @@
           const content = document.createElement('div');
           content.className = 'content';
           const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ev.lat},${ev.lon}`;
+          const attendeeCount = Number(ev.total_rsvps || 0).toLocaleString();
           content.innerHTML = `
             <div class="eyebrow">${fmtDate.format(new Date(ev.time))}</div>
             <div class="location"><a class="gradient-underline" href="${mapUrl}" target="_blank" rel="noopener">${escapeHTML(ev.location_name || 'Location TBD')}</a></div>
@@ -94,12 +95,12 @@
             <p class="desc">${escapeHTML(ev.description || 'No description yet.')}</p>
             ${ev.description && ev.description.length > 180 ? '<button class="toggle-desc">Read more</button>' : ''}
             <div class="stats" aria-label="RSVP counts">
-              <span><strong>${Number(ev.total_rsvps || 0).toLocaleString()}</strong> RSVPs</span>
+              <span><strong>${attendeeCount}</strong> RSVPs</span>
               <span>• Meetup: ${Number(ev.meetup_rsvps || 0).toLocaleString()}</span>
               <span>• Site: ${Number(ev.local_rsvps || 0).toLocaleString()}</span>
             </div>
-            <div class="names" aria-label="Attendance">
-              <strong class="attendance-heading">${Number(ev.total_rsvps || 0).toLocaleString()} REBEL SCUM ATTENDING</strong>
+            <div class="names" aria-label="Attendance" style="background:#080b12 !important; border:4px solid #fff !important; border-radius:14px; box-shadow:0 0 0 4px #ef4444, 0 0 0 8px #3b82f6; padding:14px 12px; margin:12px 0 0;">
+              <strong class="attendance-heading" style="display:block; width:100%; margin:0; padding:8px 4px; font-family:Impact, Haettenschweiler, 'Arial Black', sans-serif; font-size:clamp(1.35rem, 4vw, 3rem); line-height:1.05; letter-spacing:.08em; text-transform:uppercase; text-align:center; font-weight:900; color:#fff !important; background:none !important; -webkit-text-fill-color:#fff !important; -webkit-text-stroke:2px #000; text-shadow:3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000; filter:none;">${attendeeCount} REBEL SCUM ATTENDING</strong>
             </div>
           `;
           card.appendChild(content);
