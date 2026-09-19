@@ -7,7 +7,6 @@
 html,body{height:100%;}
 body{background:#000 !important;}
 
-/* static colour blobs for plasma-like effect without animation flicker */
 body::before, body::after{
   content: "";
   position: fixed;
@@ -32,42 +31,42 @@ body::after{
   opacity: 0.92;
 }
 
-.names {
-  margin: 12px 0 0;
-  padding: 14px 12px;
-  background: linear-gradient(180deg, rgba(17,24,39,.98), rgba(13,17,28,.99));
-  border: 3px solid #fff;
-  border-radius: 14px;
-  box-shadow:
-    0 0 0 3px #ef4444,
-    0 0 0 7px #3b82f6,
-    0 0 16px rgba(255,255,255,.65),
-    0 0 28px rgba(239,68,68,.5),
-    0 0 36px rgba(59,130,246,.45);
-  transform: rotate(-1deg);
+/* High-contrast attendance panel: intentionally no blur or glow on the letters. */
+.names{
+  margin:12px 0 0 !important;
+  padding:14px 12px !important;
+  background:#080b12 !important;
+  border:4px solid #fff !important;
+  border-radius:14px !important;
+  box-shadow:0 0 0 4px #ef4444, 0 0 0 8px #3b82f6 !important;
+  transform:none !important;
 }
 
-.attendance-heading {
-  display: block !important;
-  width: 100%;
-  margin: 0;
-  padding: 8px 4px;
-  font-size: clamp(1.35rem, 4vw, 3rem) !important;
-  line-height: 1.05;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: 1000 !important;
-  color: #fff !important;
-  -webkit-text-stroke: 1px rgba(0,0,0,.9);
-  text-shadow:
-    2px 2px 0 #080b12,
-    -2px -2px 0 #080b12,
-    2px -2px 0 #080b12,
-    -2px 2px 0 #080b12,
-    0 0 8px rgba(255,255,255,.55);
-  filter: none;
+.attendance-heading{
+  display:block !important;
+  width:100% !important;
+  margin:0 !important;
+  padding:8px 4px !important;
+  font-family:Impact, Haettenschweiler, "Arial Black", sans-serif !important;
+  font-size:clamp(1.35rem, 4vw, 3rem) !important;
+  line-height:1.05 !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  font-weight:900 !important;
+  color:#fff !important;
+  background:none !important;
+  -webkit-background-clip:initial !important;
+  background-clip:initial !important;
+  -webkit-text-fill-color:#fff !important;
+  -webkit-text-stroke:2px #000 !important;
+  text-shadow:3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000 !important;
+  filter:none !important;
+  animation:none !important;
 }
 
-/* make sure core layout sits above the background layers */
-:where(header, main, footer){ position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce){
+  .attendance-heading{animation:none !important;}
+}
+
+:where(header, main, footer){position:relative; z-index:1;}
