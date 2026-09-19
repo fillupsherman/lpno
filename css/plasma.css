@@ -1,72 +1,13 @@
 /* css/plasma.css - dynamic electric plasma background (red, white, blue) */
-:root{
-  --plasma-red: rgba(239,68,68,0.95);
-  --plasma-white: rgba(255,255,255,0.92);
-  --plasma-blue: rgba(59,130,246,0.95);
-}
-html,body{height:100%;}
-body{background:#000 !important;}
+:root{--plasma-red:rgba(239,68,68,.95);--plasma-white:rgba(255,255,255,.92);--plasma-blue:rgba(59,130,246,.95)}
+html,body{height:100%}body{background:#000!important}
+body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;filter:blur(96px) saturate(140%) contrast(110%);mix-blend-mode:screen;opacity:.95}
+body::before{background-image:radial-gradient(closest-side at 18% 28%,var(--plasma-red) 0%,rgba(239,68,68,.36) 18%,transparent 42%),radial-gradient(closest-side at 72% 68%,var(--plasma-blue) 0%,rgba(59,130,246,.30) 24%,transparent 56%)}
+body::after{background-image:radial-gradient(closest-side at 50% 44%,var(--plasma-white) 0%,rgba(255,255,255,.18) 8%,transparent 30%),radial-gradient(closest-side at 10% 80%,rgba(239,68,68,.30) 0%,rgba(59,130,246,.30) 36%,transparent 70%);opacity:.92}
 
-body::before, body::after{
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  filter: blur(96px) saturate(140%) contrast(110%);
-  mix-blend-mode: screen;
-  opacity: 0.95;
-}
-
-body::before{
-  background-image:
-    radial-gradient(closest-side at 18% 28%, var(--plasma-red) 0%, rgba(239,68,68,0.36) 18%, transparent 42%),
-    radial-gradient(closest-side at 72% 68%, var(--plasma-blue) 0%, rgba(59,130,246,0.30) 24%, transparent 56%);
-}
-
-body::after{
-  background-image:
-    radial-gradient(closest-side at 50% 44%, var(--plasma-white) 0%, rgba(255,255,255,0.18) 8%, transparent 30%),
-    radial-gradient(closest-side at 10% 80%, rgba(239,68,68,0.30) 0%, rgba(59,130,246,0.30) 36%, transparent 70%);
-  opacity: 0.92;
-}
-
-/* High-contrast attendance panel: intentionally no blur or glow on the letters. */
-.names{
-  margin:12px 0 0 !important;
-  padding:14px 12px !important;
-  background:#080b12 !important;
-  border:4px solid #fff !important;
-  border-radius:14px !important;
-  box-shadow:0 0 0 4px #ef4444, 0 0 0 8px #3b82f6 !important;
-  transform:none !important;
-}
-
-.attendance-heading{
-  display:block !important;
-  width:100% !important;
-  margin:0 !important;
-  padding:8px 4px !important;
-  font-family:Impact, Haettenschweiler, "Arial Black", sans-serif !important;
-  font-size:clamp(1.35rem, 4vw, 3rem) !important;
-  line-height:1.05 !important;
-  letter-spacing:.08em !important;
-  text-transform:uppercase !important;
-  text-align:center !important;
-  font-weight:900 !important;
-  color:#fff !important;
-  background:none !important;
-  -webkit-background-clip:initial !important;
-  background-clip:initial !important;
-  -webkit-text-fill-color:#fff !important;
-  -webkit-text-stroke:2px #000 !important;
-  text-shadow:3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000 !important;
-  filter:none !important;
-  animation:none !important;
-}
-
-@media (prefers-reduced-motion: reduce){
-  .attendance-heading{animation:none !important;}
-}
-
-:where(header, main, footer){position:relative; z-index:1;}
+/* Crisp letters with a controlled neon effect. */
+.names{margin:12px 0 0!important;padding:14px 12px!important;background:#080b12!important;border:4px solid #fff!important;border-radius:14px!important;box-shadow:0 0 0 4px #ef4444,0 0 0 8px #3b82f6,0 0 18px rgba(255,255,255,.55)!important;transform:none!important}
+.attendance-heading{display:block!important;width:100%!important;margin:0!important;padding:8px 4px!important;font-family:Impact,Haettenschweiler,"Arial Black",sans-serif!important;font-size:clamp(1.35rem,4vw,3rem)!important;line-height:1.05!important;letter-spacing:.08em!important;text-transform:uppercase!important;text-align:center!important;font-weight:900!important;color:#fff!important;background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;-webkit-text-fill-color:#fff!important;-webkit-text-stroke:2px #000!important;text-shadow:3px 3px 0 #000,-3px -3px 0 #000,3px -3px 0 #000,-3px 3px 0 #000,0 0 10px rgba(255,255,255,.75),0 0 18px rgba(239,68,68,.65),0 0 24px rgba(59,130,246,.65)!important;filter:none!important;animation:rebel-scum-pulse 1.4s ease-in-out infinite alternate!important}
+@keyframes rebel-scum-pulse{from{transform:scale(1);text-shadow:3px 3px 0 #000,-3px -3px 0 #000,3px -3px 0 #000,-3px 3px 0 #000,0 0 7px rgba(255,255,255,.65),0 0 14px rgba(239,68,68,.5),0 0 18px rgba(59,130,246,.5)}to{transform:scale(1.035);text-shadow:3px 3px 0 #000,-3px -3px 0 #000,3px -3px 0 #000,-3px 3px 0 #000,0 0 12px rgba(255,255,255,.9),0 0 24px rgba(239,68,68,.8),0 0 30px rgba(59,130,246,.8)}}
+@media(prefers-reduced-motion:reduce){.attendance-heading{animation:none!important}}
+:where(header,main,footer){position:relative;z-index:1}
