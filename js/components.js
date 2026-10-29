@@ -36,9 +36,11 @@ export function initHeader() {
     
     // Check if this link should have a dropdown menu
     let hasDropdown = false;
-    for (const item of NAV_LINKS) {
-      if (item.href === href && item.dropdown) {
+    let item = null;
+    for (const navItem of NAV_LINKS) {
+      if (navItem.href === href && navItem.dropdown) {
         hasDropdown = true;
+        item = navItem;
         break;
       }
     };
