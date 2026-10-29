@@ -160,17 +160,20 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   gap:22px;
   justify-content: center;
 }
-.nav-desktop a {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-decoration:none;
-  color:white;
-  font-weight:600;
-  font-size:15px;
-  transition:color 0.2s;
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 4px;
+  position: relative;
 }
-.nav-desktop a:hover { color:var(--accent-2);} 
+
+.nav-link:hover {
+  color: var(--accent-2);
+} 
 .nav-desktop .label { display:inline;} 
 .site-header {
   position: sticky;

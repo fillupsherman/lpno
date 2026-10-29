@@ -83,7 +83,6 @@ export function initHeader() {
       }
     });
   });
-    </div>`;
 }
 
 /**
