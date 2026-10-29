@@ -302,10 +302,8 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 }
 
 .dropdown {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
+  z-index: 100;
   min-width: 180px;
   background: color-mix(in oklab, var(--card), black 70%);
   border: 1px solid rgba(255,255,255,.1);
@@ -323,12 +321,11 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   transform: translateX(-50%) translateY(-8px);
 }
 
-.nav-link:hover + .dropdown,
-.nav-link:focus + .dropdown,
-.dropdown.active {
+.header-grid .nav-link:hover + .dropdown,
+.header-grid .nav-link:focus + .dropdown,
+.header-grid .nav-link.active + .dropdown {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%);
 }
 
 .dropdown a {
