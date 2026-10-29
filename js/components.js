@@ -1,7 +1,7 @@
 /** Shared page components — header and footer */
 
 const NAV_LINKS = [
-  { href: '/index',         label: 'Events', dropdown: '<a href="/">New Jersey</a><a href="/coming-soon.html">Philadelphia (Coming Soon)</a>' },
+  { href: '/index',         label: 'Events', dropdown: '<a href="/">New Jersey</a><a href="/coming-soon.html">Philadelphia (Coming Soon)</a>', dataPos: 'left' },
   { href: '/subscribe',     label: 'Mailing List' },
   { href: '/volunteer.html', label: 'Volunteer' },
   { href: '/donate.html',   label: 'Donate' },
@@ -50,7 +50,8 @@ export function initHeader() {
             ${item.dropdown}
           </div>` : '';
 
-    return `<a href="${href}"${active} class="nav-link">${label}</a>${dropdownHTML}`;
+    const pos = NAV_LINKS.find(n => n.href === href)?.dataPos || 'left';
+    return `<a href="${href}"${active} class="nav-link" data-dropdown-pos="${pos}">${label}</a>${dropdownHTML}`;
   };
 
   const navLinks = NAV_LINKS.map(({ href, label, dropdown }) => {

@@ -302,7 +302,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 }
 
 .dropdown {
-  position: fixed;
+  position: absolute;
   z-index: 100;
   min-width: 180px;
   background: color-mix(in oklab, var(--card), black 70%);
@@ -326,6 +326,12 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 .header-grid .nav-link.active + .dropdown {
   opacity: 1;
   visibility: visible;
+}
+
+.header-grid .nav-link[data-dropdown-pos="left"] ~ .dropdown,
+.header-grid .nav-link[data-dropdown-pos="right"] ~ .dropdown {
+  position: absolute;
+  left: calc(100% + 18px);
 }
 
 .dropdown a {
