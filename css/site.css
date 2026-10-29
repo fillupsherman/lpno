@@ -226,7 +226,7 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   padding: 8px 0px;
 }
 
-.header-grid .nav-desktop a {
+.header-grid .nav-link {
   text-decoration: none;
   color: white;
   font-weight: 600;
@@ -234,10 +234,12 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 8px 4px;
+  position: relative;
   transition: color .2s;
 }
 
-.header-grid .nav-desktop a:hover {
+.header-grid .nav-link:hover {
   color: var(--accent-2);
 }
 
