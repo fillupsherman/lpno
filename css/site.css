@@ -243,6 +243,31 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
   color: var(--accent-2);
 }
 
+.nav-desktop {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.nav-desktop a,
+.nav-desktop .nav-link {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  position: relative;
+  transition: color .2s;
+}
+
+.nav-desktop a:hover,
+.nav-desktop .nav-link:hover {
+  color: var(--accent-2);
+}
+
 @media (max-width:1160px){
   .nav-desktop .label {font-size:10px; margin-bottom:0; white-space: nowrap; }
 }
