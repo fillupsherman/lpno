@@ -1,12 +1,12 @@
 /** Shared page components — header and footer */
 
 const NAV_LINKS = [
-  { href: '/index',         label: 'Events' },
-  { href: '/subscribe',     label: 'Mailing List', dropdown: '<a href="/subscribe">Subscribe</a>' },
-  { href: '/volunteer.html', label: 'Volunteer', dropdown: '<a href="/volunteer.html">Opportunities</a>' },
-  { href: '/donate.html',   label: 'Donate', dropdown: '<a href="/donate.html">Supplies</a>' },
-  { href: '/chapters.html', label: 'Chapters', dropdown: '<a href="/chapters.html">Find a Chapter</a>' },
-  { href: '/about.html',    label: 'About', dropdown: '<a href="/about.html">Mission</a><a href="/subscribe">Newsletter</a>' },
+  { href: '/index',         label: 'Events', dropdown: '<a href="/">New Jersey</a><a href="/coming-soon.html">Philadelphia (Coming Soon)</a>' },
+  { href: '/subscribe',     label: 'Mailing List' },
+  { href: '/volunteer.html', label: 'Volunteer' },
+  { href: '/donate.html',   label: 'Donate' },
+  { href: '/chapters.html', label: 'Chapters' },
+  { href: '/about.html',    label: 'About' },
 ];
 
 /**
