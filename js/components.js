@@ -2,11 +2,11 @@
 
 const NAV_LINKS = [
   { href: '/index',         label: 'Events' },
-  { href: '/subscribe',     label: 'Mailing List' },
-  { href: '/volunteer.html', label: 'Volunteer' },
-  { href: '/donate.html',   label: 'Donate' },
-  { href: '/chapters.html', label: 'Chapters' },
-  { href: '/about.html',    label: 'About' },
+  { href: '/subscribe',     label: 'Mailing List', dropdown: '<a href="/subscribe">Subscribe</a>' },
+  { href: '/volunteer.html', label: 'Volunteer', dropdown: '<a href="/volunteer.html">Opportunities</a>' },
+  { href: '/donate.html',   label: 'Donate', dropdown: '<a href="/donate.html">Supplies</a>' },
+  { href: '/chapters.html', label: 'Chapters', dropdown: '<a href="/chapters.html">Find a Chapter</a>' },
+  { href: '/about.html',    label: 'About', dropdown: '<a href="/about.html">Mission</a><a href="/subscribe">Newsletter</a>' },
 ];
 
 /**
@@ -30,9 +30,29 @@ export function initHeader() {
 
   const path = typeof window !== 'undefined' ? window.location.pathname : '/';
 
-  const navLinks = NAV_LINKS.map(({ href, label }) => {
+  // Build dropdown content for each nav link
+  const buildDropdownContent = (href, label) => {
     const active = isActivePath(href, path) ? ' aria-current="page"' : '';
-    return `<a href="${href}"${active}><span class="label">${label}</span></a>`;
+    
+    // Check if this link should have a dropdown menu
+    let hasDropdown = false;
+    for (const item of NAV_LINKS) {
+      if (item.href === href && item.dropdown) {
+        hasDropdown = true;
+        break;
+      }
+    };
+    
+    const dropdownHTML = hasDropdown ? `
+          <div class="dropdown">
+            ${item.dropdown}
+          </div>` : '';
+
+    return `<a href="${href}"${active} class="nav-link">${label}</a>${dropdownHTML}`;
+  };
+
+  const navLinks = NAV_LINKS.map(({ href, label, dropdown }) => {
+    return buildDropdownContent(href, label);
   }).join('\n          ');
 
   el.className = 'site-header';
@@ -47,6 +67,22 @@ export function initHeader() {
       <nav class="nav-desktop">
           ${navLinks}
       </nav>
+    </div>`;
+
+  // Add click handlers for mobile dropdown toggling
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+      const dropdown = link.nextElementSibling?.closest('.dropdown');
+      if (dropdown) {
+        const isOpen = dropdown.classList.contains('open');
+        // Close all other dropdowns first
+        document.querySelectorAll('.dropdown.open:not(.active)').forEach(d => d.classList.remove('open'));
+        if (!isOpen) {
+          dropdown.classList.add('open', 'active');
+        }
+      }
+    });
+  });
     </div>`;
 }
 

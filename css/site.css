@@ -255,3 +255,65 @@ a.inline{color:inherit; text-decoration-color: color-mix(in oklab, var(--muted),
 }
 
 :where(header, main, footer){ position: relative; z-index: 1; }
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 4px;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--accent-2);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  background: color-mix(in oklab, var(--card), black 70%);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 6px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility .2s ease, transform .2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+
+.dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+.nav-link:hover + .dropdown,
+.nav-link:focus + .dropdown,
+.dropdown.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%);
+}
+
+.dropdown a {
+  display: block;
+  padding: 8px 12px;
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  transition: background .15s ease, color .15s ease;
+}
+
+.dropdown a:hover {
+  background: rgba(255,255,255,.08);
+  color: var(--accent-2);
+}
+
+.dropdown a:first-child { border-radius: 6px 6px 0 0; }
+.dropdown a:last-child { border-radius: 0 0 6px 6px; }
